@@ -4,32 +4,26 @@
 
         var wrapper = document.createElement('div');
         wrapper.id = 'os-modal';
+        wrapper.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; align-items:center; justify-content:center;';
         wrapper.innerHTML = `
-            <div class="FullModalOverlay" style="display:block;">
-                <div class="ModalOverlayContent ModalOverlayBackground"></div>
-            </div>
-            <div class="ModalPosition" tabindex="0">
-                <div class="ModalPosition_Content">
-                    <div class="ModalPosition_TopBar"></div>
-                    <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _DialogCenterVertically">
-                        <div class="DialogContent_InnerWidth">
-                            <div class="Panel">
-                                <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
-                                    <div role="heading" aria-level="2" class="DialogHeader">Installer un script</div>
-                                </div>
-                                <div class="DialogInput_Wrapper _DialogLayout Panel" style="margin-top:16px;">
-                                    <input id="os-appid-input"
-                                        class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
-                                        placeholder="AppID"
-                                        type="text"
-                                        spellcheck="false">
-                                </div>
-                                <div class="DialogFooter">
-                                    <div class="DialogTwoColLayout _DialogColLayout Panel">
-                                        <button id="os-download-btn" type="button" class="DialogButton _DialogLayout Primary Focusable">Télécharger</button>
-                                        <button id="os-cancel-btn" type="button" class="DialogButton _DialogLayout Secondary Focusable">Annuler</button>
-                                    </div>
-                                </div>
+            <div id="os-modal-bg" style="position:absolute; top:0; left:0; width:100%; height:100%;" class="ModalOverlayContent ModalOverlayBackground"></div>
+            <div style="position:relative; z-index:1;" class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog">
+                <div class="DialogContent_InnerWidth">
+                    <div class="Panel">
+                        <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
+                            <div role="heading" aria-level="2" class="DialogHeader">Installer un script</div>
+                        </div>
+                        <div class="DialogInput_Wrapper _DialogLayout Panel" style="margin-top:16px;">
+                            <input id="os-appid-input"
+                                class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
+                                placeholder="AppID"
+                                type="text"
+                                spellcheck="false">
+                        </div>
+                        <div class="DialogFooter">
+                            <div class="DialogTwoColLayout _DialogColLayout Panel">
+                                <button id="os-download-btn" type="button" class="DialogButton _DialogLayout Primary Focusable">Télécharger</button>
+                                <button id="os-cancel-btn" type="button" class="DialogButton _DialogLayout Secondary Focusable">Annuler</button>
                             </div>
                         </div>
                     </div>
@@ -39,7 +33,7 @@
 
         document.body.appendChild(wrapper);
 
-        wrapper.querySelector('.ModalOverlayContent').onclick = () => wrapper.remove();
+        wrapper.querySelector('#os-modal-bg').onclick = () => wrapper.remove();
         wrapper.querySelector('#os-cancel-btn').onclick = () => wrapper.remove();
         wrapper.querySelector('#os-download-btn').onclick = () => {
             var appid = wrapper.querySelector('#os-appid-input').value.trim();
