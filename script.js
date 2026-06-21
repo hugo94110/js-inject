@@ -4,37 +4,56 @@
 
         var wrapper = document.createElement('div');
         wrapper.id = 'os-modal';
-        wrapper.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; align-items:center; justify-content:center;';
+        wrapper.className = 'FullModalOverlay';
         wrapper.innerHTML = `
-            <div id="os-modal-bg" style="position:absolute; top:0; left:0; width:100%; height:100%;" class="ModalOverlayContent ModalOverlayBackground"></div>
-            <div style="position:relative; z-index:1;" class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog">
-                <div class="DialogContent_InnerWidth">
-                    <div class="Panel">
-                        <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
-                            <div role="heading" aria-level="2" class="DialogHeader">Installer un script</div>
-                        </div>
-                        <div class="DialogInput_Wrapper _DialogLayout Panel" style="margin-top:16px;">
-                            <input id="os-appid-input"
-                                class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
-                                placeholder="AppID"
-                                type="text"
-                                spellcheck="false">
-                        </div>
-                        <div class="DialogFooter">
-                            <div class="DialogTwoColLayout _DialogColLayout Panel">
-                                <button id="os-download-btn" type="button" class="DialogButton _DialogLayout Primary Focusable">Télécharger</button>
-                                <button id="os-cancel-btn" type="button" class="DialogButton _DialogLayout Secondary Focusable">Annuler</button>
+            <div class="ModalOverlayContent ModalOverlayBackground"></div>
+            <dialog open="">
+                <div></div>
+                <div class="ModalOverlayContent active" tabindex="-1">
+                    <div class="ModalPosition" tabindex="0">
+                        <div class="ModalPosition_Content">
+                            <div class="ModalPosition_TopBar"></div>
+                            <div class="ModalPosition_Dismiss">
+                                <div id="os-close-btn" class="closeButton">
+                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="SVGIcon_Button SVGIcon_X_Line" width="256px" height="256px" viewBox="0 0 256 256">
+                                        <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="212" y1="212" x2="44" y2="44"></line>
+                                        <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="44" y1="212" x2="212" y2="44"></line>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _DialogCenterVertically">
+                                <div class="DialogContent_InnerWidth">
+                                    <form role="dialog">
+                                        <div role="heading" aria-level="2" class="DialogHeader">Installer un script</div>
+                                        <div class="DialogBody">
+                                            <div class="DialogInput_Wrapper _DialogLayout Panel">
+                                                <input id="os-appid-input"
+                                                    class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
+                                                    placeholder="AppID"
+                                                    type="text"
+                                                    spellcheck="false">
+                                            </div>
+                                        </div>
+                                        <div class="DialogFooter">
+                                            <div class="DialogTwoColLayout _DialogColLayout Panel">
+                                                <button id="os-download-btn" type="button" class="DialogButton _DialogLayout Primary Focusable">Télécharger</button>
+                                                <button id="os-cancel-btn" type="button" class="DialogButton _DialogLayout Secondary Focusable">Annuler</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </dialog>
         `;
 
         document.body.appendChild(wrapper);
 
-        wrapper.querySelector('#os-modal-bg').onclick = () => wrapper.remove();
+        wrapper.querySelector('#os-close-btn').onclick = () => wrapper.remove();
         wrapper.querySelector('#os-cancel-btn').onclick = () => wrapper.remove();
+        wrapper.querySelector('.ModalOverlayContent.ModalOverlayBackground').onclick = () => wrapper.remove();
         wrapper.querySelector('#os-download-btn').onclick = () => {
             var appid = wrapper.querySelector('#os-appid-input').value.trim();
             if (!appid) return;
