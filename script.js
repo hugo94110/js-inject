@@ -7,7 +7,7 @@
         wrapper.className = 'FullModalOverlay';
         wrapper.innerHTML = `
             <div class="ModalOverlayContent ModalOverlayBackground"></div>
-            <div class="ModalOverlayContent active" tabindex="-1" id="os-modal-active">
+            <div class="ModalOverlayContent active" tabindex="-1">
                 <div class="ModalPosition" tabindex="0">
                     <div class="ModalPosition_Content">
                         <div class="ModalPosition_TopBar"></div>
@@ -50,13 +50,11 @@
 
         var closeModal = () => wrapper.remove();
 
+        wrapper.style.pointerEvents = 'all';
+        wrapper.onclick = closeModal;
+        wrapper.querySelector('.DialogContent').onclick = (e) => e.stopPropagation();
         wrapper.querySelector('#os-close-btn').onclick = closeModal;
         wrapper.querySelector('#os-cancel-btn').onclick = closeModal;
-
-        wrapper.querySelector('#os-modal-active').onclick = (e) => {
-            if (e.target === e.currentTarget) closeModal();
-        };
-
         wrapper.querySelector('#os-download-btn').onclick = () => {
             var appid = wrapper.querySelector('#os-appid-input').value.trim();
             if (!appid) return;
