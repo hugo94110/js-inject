@@ -23,7 +23,7 @@
                             </div>
                             <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _DialogCenterVertically" style="min-width:500px;">
                                 <div class="DialogContent_InnerWidth">
-                                    <div role="heading" aria-level="2" class="DialogHeader">Install a script</div>
+                                    <div role="heading" aria-level="2" class="DialogHeader">Add a game</div>
                                     <div class="DialogBody">
                                         <div class="DialogInput_Wrapper _DialogLayout Panel">
                                             <input id="os-appid-input"
