@@ -70,7 +70,7 @@
 
         container.insertAdjacentHTML('afterbegin', `
             <div style="-webkit-app-region:no-drag; display:flex; align-items:center; gap:8px; margin-right:8px;">
-                <div class="_2Lu3d-5qLmW4i19ysTt2jT"><div class="" style="font-size:14px;">OpenSteam is active</div></div>
+                <div class="_2Lu3d-5qLmW4i19ysTt2jT"><div class="" style="font-size:13px;">OpenSteam v1.2.0</div></div>
 
                 <div id="githubButton" style="cursor:pointer;">
                     <div class="_2Szzh5sKyGgnLUR870zbDE RtSv39ZoBOySnb8XQ5hJf _3qhGkQ5qLVNQQ-J2-uPoHt" style="display:flex; align-items:center; justify-content:center;">
