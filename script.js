@@ -21,10 +21,10 @@
                                     </svg>
                                 </div>
                             </div>
-                            <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _DialogCenterVertically">
+                            <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _DialogCenterVertically" style="min-width:500px;">
                                 <div class="DialogContent_InnerWidth">
                                     <form role="dialog">
-                                        <div role="heading" aria-level="2" class="DialogHeader">Installer un script</div>
+                                        <div role="heading" aria-level="2" class="DialogHeader">Install a script</div>
                                         <div class="DialogBody">
                                             <div class="DialogInput_Wrapper _DialogLayout Panel">
                                                 <input id="os-appid-input"
@@ -36,8 +36,8 @@
                                         </div>
                                         <div class="DialogFooter">
                                             <div class="DialogTwoColLayout _DialogColLayout Panel">
-                                                <button id="os-download-btn" type="button" class="DialogButton _DialogLayout Primary Focusable">Télécharger</button>
-                                                <button id="os-cancel-btn" type="button" class="DialogButton _DialogLayout Secondary Focusable">Annuler</button>
+                                                <button id="os-download-btn" type="button" class="DialogButton _DialogLayout Primary Focusable">Download</button>
+                                                <button id="os-cancel-btn" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
                                             </div>
                                         </div>
                                     </form>
@@ -51,14 +51,20 @@
 
         document.body.appendChild(wrapper);
 
-        wrapper.querySelector('#os-close-btn').onclick = () => wrapper.remove();
-        wrapper.querySelector('#os-cancel-btn').onclick = () => wrapper.remove();
-        wrapper.querySelector('.ModalOverlayContent.ModalOverlayBackground').onclick = () => wrapper.remove();
+        var closeModal = () => wrapper.remove();
+
+        wrapper.querySelector('#os-close-btn').onclick = closeModal;
+        wrapper.querySelector('#os-cancel-btn').onclick = closeModal;
+
+        wrapper.querySelector('.ModalOverlayContent.active').onclick = (e) => {
+            if (e.target === e.currentTarget) closeModal();
+        };
+
         wrapper.querySelector('#os-download-btn').onclick = () => {
             var appid = wrapper.querySelector('#os-appid-input').value.trim();
             if (!appid) return;
             console.log('OpenSteam: download for AppID', appid);
-            wrapper.remove();
+            closeModal();
         };
     }
 
