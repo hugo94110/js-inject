@@ -7,46 +7,43 @@
         wrapper.className = 'FullModalOverlay';
         wrapper.innerHTML = `
             <div class="ModalOverlayContent ModalOverlayBackground"></div>
-            <dialog open="">
-                <div></div>
-                <div class="ModalOverlayContent active" tabindex="-1">
-                    <div class="ModalPosition" tabindex="0">
-                        <div class="ModalPosition_Content">
-                            <div class="ModalPosition_TopBar"></div>
-                            <div class="ModalPosition_Dismiss">
-                                <div id="os-close-btn" class="closeButton">
-                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="SVGIcon_Button SVGIcon_X_Line" width="256px" height="256px" viewBox="0 0 256 256">
-                                        <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="212" y1="212" x2="44" y2="44"></line>
-                                        <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="44" y1="212" x2="212" y2="44"></line>
-                                    </svg>
-                                </div>
+            <div class="ModalOverlayContent active" tabindex="-1" id="os-modal-active">
+                <div class="ModalPosition" tabindex="0">
+                    <div class="ModalPosition_Content">
+                        <div class="ModalPosition_TopBar"></div>
+                        <div class="ModalPosition_Dismiss">
+                            <div id="os-close-btn" class="closeButton">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="SVGIcon_Button SVGIcon_X_Line" width="256px" height="256px" viewBox="0 0 256 256">
+                                    <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="212" y1="212" x2="44" y2="44"></line>
+                                    <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="44" y1="212" x2="212" y2="44"></line>
+                                </svg>
                             </div>
-                            <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _DialogCenterVertically" style="min-width:500px;">
-                                <div class="DialogContent_InnerWidth">
-                                    <form role="dialog">
-                                        <div role="heading" aria-level="2" class="DialogHeader">Install a script</div>
-                                        <div class="DialogBody">
-                                            <div class="DialogInput_Wrapper _DialogLayout Panel">
-                                                <input id="os-appid-input"
-                                                    class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
-                                                    placeholder="AppID"
-                                                    type="text"
-                                                    spellcheck="false">
-                                            </div>
+                        </div>
+                        <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _DialogCenterVertically" style="min-width:500px;">
+                            <div class="DialogContent_InnerWidth">
+                                <div role="dialog">
+                                    <div role="heading" aria-level="2" class="DialogHeader">Install a script</div>
+                                    <div class="DialogBody">
+                                        <div class="DialogInput_Wrapper _DialogLayout Panel">
+                                            <input id="os-appid-input"
+                                                class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
+                                                placeholder="AppID"
+                                                type="text"
+                                                spellcheck="false">
                                         </div>
-                                        <div class="DialogFooter">
-                                            <div class="DialogTwoColLayout _DialogColLayout Panel">
-                                                <button id="os-download-btn" type="button" class="DialogButton _DialogLayout Primary Focusable">Download</button>
-                                                <button id="os-cancel-btn" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
-                                            </div>
+                                    </div>
+                                    <div class="DialogFooter">
+                                        <div class="DialogTwoColLayout _DialogColLayout Panel">
+                                            <button id="os-download-btn" type="button" class="DialogButton _DialogLayout Primary Focusable">Download</button>
+                                            <button id="os-cancel-btn" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </dialog>
+            </div>
         `;
 
         document.body.appendChild(wrapper);
@@ -56,7 +53,7 @@
         wrapper.querySelector('#os-close-btn').onclick = closeModal;
         wrapper.querySelector('#os-cancel-btn').onclick = closeModal;
 
-        wrapper.querySelector('.ModalOverlayContent.active').onclick = (e) => {
+        wrapper.querySelector('#os-modal-active').onclick = (e) => {
             if (e.target === e.currentTarget) closeModal();
         };
 
