@@ -2,12 +2,12 @@
     function openModal() {
         if (document.querySelector('#os-modal')) return;
 
-        var modal = document.createElement('div');
-        modal.id = 'os-modal';
-        modal.className = 'FullModalOverlay';
-        modal.style.display = 'block';
-        modal.innerHTML = `
-            <div class="ModalOverlayContent ModalOverlayBackground"></div>
+        var wrapper = document.createElement('div');
+        wrapper.id = 'os-modal';
+        wrapper.innerHTML = `
+            <div class="FullModalOverlay" style="display:block;">
+                <div class="ModalOverlayContent ModalOverlayBackground"></div>
+            </div>
             <div class="ModalPosition" tabindex="0">
                 <div class="ModalPosition_Content">
                     <div class="ModalPosition_TopBar"></div>
@@ -37,15 +37,15 @@
             </div>
         `;
 
-        document.body.appendChild(modal);
+        document.body.appendChild(wrapper);
 
-        modal.querySelector('.ModalOverlayContent').onclick = () => modal.remove();
-        modal.querySelector('#os-cancel-btn').onclick = () => modal.remove();
-        modal.querySelector('#os-download-btn').onclick = () => {
-            var appid = modal.querySelector('#os-appid-input').value.trim();
+        wrapper.querySelector('.ModalOverlayContent').onclick = () => wrapper.remove();
+        wrapper.querySelector('#os-cancel-btn').onclick = () => wrapper.remove();
+        wrapper.querySelector('#os-download-btn').onclick = () => {
+            var appid = wrapper.querySelector('#os-appid-input').value.trim();
             if (!appid) return;
             console.log('OpenSteam: download for AppID', appid);
-            modal.remove();
+            wrapper.remove();
         };
     }
 
