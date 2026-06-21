@@ -70,7 +70,7 @@
 
         container.insertAdjacentHTML('afterbegin', `
         <div style="-webkit-app-region:no-drag; display:flex; align-items:center; gap:8px; margin-right:8px;">
-            <div class="_2Lu3d-5qLmW4i19ysTt2jT"><div class="" style="font-size:12px;">OpenSteam v1.2</div></div>
+            <div class="_2Lu3d-5qLmW4i19ysTt2jT"><div class="" style="font-size:12px;">OpenSteam is active</div></div>
             <div id="addGameButton" style="cursor:pointer;">
                 <div class="_2Szzh5sKyGgnLUR870zbDE RtSv39ZoBOySnb8XQ5hJf _3qhGkQ5qLVNQQ-J2-uPoHt">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="18" height="18" fill="none" style="width:18px !important; height:18px !important; display:block; flex:0 0 auto;" class="_34bQcTHo5QKzuujoEyU1tm">
