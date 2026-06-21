@@ -90,10 +90,22 @@
             </div>
         `);
 
-        document.querySelector('#addGameButton').onclick = openModal;
-        document.querySelector('#githubButton').onclick = function() {
-            window.open('https://github.com/hugo94110', '_blank', 'noopener,noreferrer');
-        };
+        var addGameButton = document.querySelector('#addGameButton');
+        if (addGameButton) {
+            addGameButton.onclick = openModal;
+        }
+
+        var githubButton = document.querySelector('#githubButton');
+        if (githubButton) {
+            githubButton.onclick = function(event) {
+                event.preventDefault();
+                var link = document.createElement('a');
+                link.href = 'https://github.com/hugo94110';
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.click();
+            };
+        }
     }
 
     new MutationObserver(inject).observe(document.body, { childList: true, subtree: true });
