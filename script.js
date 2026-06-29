@@ -47,16 +47,24 @@
             </dialog>
         `;
 
-        var container = document.querySelector('._27qasW5wLU4h4nUgawpo1q') || document.body;
+        var container = document.querySelector('._27qasW5wLU4h4nUgawpo1q');
+        if (!container) container = document.body;
         container.appendChild(wrapper);
 
-        var closeModal = () => wrapper.remove();
-        wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', (e) => {
-            if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeModal();
+        function closeModal() {
+            wrapper.remove();
+        }
+
+        wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
+            if (!wrapper.querySelector('.DialogContent').contains(e.target)) {
+                closeModal();
+            }
         });
+
         wrapper.querySelector('#os-close-btn').onclick = closeModal;
         wrapper.querySelector('#os-cancel-btn').onclick = closeModal;
-        wrapper.querySelector('#os-download-btn').onclick = () => {
+        
+        wrapper.querySelector('#os-download-btn').onclick = function() {
             var appid = wrapper.querySelector('#os-appid-input').value.trim();
             if (!appid) return;
             console.log('OpenSteam: download for AppID', appid);
@@ -66,7 +74,7 @@
 
     function inject() {
         var container = document.querySelector('._3cykd-VfN_xBxf3Qxriccm._1-9sir4j_KQiMqdkZjQN0u');
-        if (!container || container.querySelector('#addGameButton') || container.querySelector('#githubButton')) return;
+        if (!container || container.querySelector('#githubButton')) return;
 
         container.insertAdjacentHTML('afterbegin', `
             <div id="githubButton" style="cursor:pointer;">
@@ -78,22 +86,27 @@
             </div>
         `);
 
-        var addGameButton = document.querySelector('#addGameButton');
-        if (addGameButton) {
-            addGameButton.onclick = openModal;
+        var addGameContainer = document.querySelector('._2WgQEFvIzJw_SHNGbjtRFU');
+        if (addGameContainer && !document.querySelector('#addGameButton')) {
+            addGameContainer.insertAdjacentHTML('beforeend', `
+                <div id="addGameButton" class="uE7Pj4tb2n3_Bx4vjEX0a rkfSfuCLRt8sqpkXJqxYo Focusable" tabindex="0" role="button">
+                    <svg version="1.1" id="arrowBase" xmlns="http://www.w3.org/2000/svg" class="SVGIcon_Button SVGIcon_Arrow" x="0px" y="0px" width="256px" height="256px" viewBox="0 0 256 256" style="transform: rotate(0deg);">
+                        <polyline fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="128,247.688 128,8.313 181.061,61.674 "></polyline>
+                        <polyline fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="128,247.688 128,8.313 74.939,61.674 "></polyline>
+                    </svg>
+                </div>
+            `);
+            document.querySelector('#addGameButton').onclick = openModal;
         }
 
-        var githubButton = document.querySelector('#githubButton');
-        if (githubButton) {
-            githubButton.onclick = function(event) {
-                event.preventDefault();
-                var link = document.createElement('a');
-                link.href = 'https://github.com/hugo94110';
-                link.target = '_blank';
-                link.rel = 'noopener noreferrer';
-                link.click();
-            };
-        }
+        document.querySelector('#githubButton').onclick = function(event) {
+            event.preventDefault();
+            var link = document.createElement('a');
+            link.href = 'https://github.com/hugo94110';
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.click();
+        };
     }
 
     new MutationObserver(inject).observe(document.body, { childList: true, subtree: true });
