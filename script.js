@@ -1,5 +1,5 @@
 (function() {
-    function openModal() {
+    function openAddGameModal() {
         if (document.querySelector('#addGameModal')) return;
 
         var wrapper = document.createElement('div');
@@ -48,27 +48,27 @@
         `;
 
         var container = document.querySelector('._27qasW5wLU4h4nUgawpo1q');
-        if (!container) container = document.body;
+        if (!container) return;
         container.appendChild(wrapper);
 
-        function closeModal() {
+        function closeAddGameModal() {
             wrapper.remove();
         }
 
         wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
             if (!wrapper.querySelector('.DialogContent').contains(e.target)) {
-                closeModal();
+                closeAddGameModal();
             }
         });
 
-        wrapper.querySelector('#addGameModalCloseButton').onclick = closeModal;
-        wrapper.querySelector('#addGameModalCancelButton').onclick = closeModal;
+        wrapper.querySelector('#addGameModalCloseButton').onclick = closeAddGameModal;
+        wrapper.querySelector('#addGameModalCancelButton').onclick = closeAddGameModal;
         
         wrapper.querySelector('#addGameModalDownloadButton').onclick = function() {
             var appid = wrapper.querySelector('#addGameModalAppIDInput').value.trim();
             if (!appid) return;
             console.log('OpenSteam: download for AppID', appid);
-            closeModal();
+            closeAddGameModal();
         };
     }
 
@@ -86,6 +86,7 @@
                     </div>
                 </div>
             `);
+            
             document.querySelector('#githubButton').onclick = function(event) {
                 event.preventDefault();
                 var link = document.createElement('a');
@@ -106,7 +107,7 @@
                     </svg>
                 </div>
             `);
-            document.querySelector('#addGameButton').onclick = openModal;
+            document.querySelector('#addGameButton').onclick = openAddGameModal;
         }
     }
 
