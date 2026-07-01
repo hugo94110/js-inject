@@ -135,7 +135,7 @@
             var downloadBtn = wrapper.querySelector('#addGameModalDownloadButton');
             var appidInput = wrapper.querySelector('#addGameModalAppIDInput');
             appidInput.addEventListener('input', function() {
-                downloadBtn.classList.toggle('Disabled', !appidInput.value.trim());
+                downloadBtn.classList.toggle('Disabled', !/^\d+$/.test(appidInput.value.trim()));
             });
 
             downloadBtn.onclick = async function() {
