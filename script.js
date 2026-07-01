@@ -144,8 +144,8 @@
             var referenceNode = container.children[container.children.length - 2];
             var temp = document.createElement('div');
             temp.innerHTML = `
-                <div id="rootMenuOSSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">OpenSteam Settings</div>
                 <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
+                <div id="rootMenuOSSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">OpenSteam Settings</div>
             `;
             while (temp.firstChild) {
                 container.insertBefore(temp.firstChild, referenceNode);
