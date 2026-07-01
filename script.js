@@ -113,13 +113,13 @@
                 document.querySelector('#addGameButton').onclick = openAddGameModal;
             }
         }
-        
+
         new MutationObserver(inject).observe(document.body, { childList: true, subtree: true });
         inject();
     }
 
     if (title === 'Steam Root Menu') {
-        function injectRootMenu() {
+        function inject() {
             var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
             if (!container) return;
             if (container.querySelector('#rootMenuTestItem')) return;
@@ -129,7 +129,7 @@
             `);
         }
 
-        new MutationObserver(injectRootMenu).observe(document.body, { childList: true, subtree: true });
-        injectRootMenu();
+        new MutationObserver(inject).observe(document.body, { childList: true, subtree: true });
+        inject();
     }
 })();
