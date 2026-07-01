@@ -28,6 +28,7 @@
                                     <div class="DialogContent_InnerWidth">
                                         <div role="heading" aria-level="2" class="DialogHeader">Add a game</div>
                                         <div class="DialogBody">
+                                            <div class="DialogBodyText"><div id="«r26b»" style="display: contents;">Install a user theme from an ID. These ID's can be found after selecting a theme at <a href="#">https://steambrew.app/themes</a><br><br><div class="DialogInput_Wrapper _DialogLayout Panel"><input placeholder="Enter an ID here..." class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable" type="text" value=""></div></div></div>
                                             <div class="DialogInput_Wrapper _DialogLayout Panel">
                                                 <input id="addGameModalAppIDInput"
                                                     class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
