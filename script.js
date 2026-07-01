@@ -1,9 +1,9 @@
 (function() {
     function openModal() {
-        if (document.querySelector('#os-modal')) return;
+        if (document.querySelector('#addGameModal')) return;
 
         var wrapper = document.createElement('div');
-        wrapper.id = 'os-modal';
+        wrapper.id = 'addGameModal';
         wrapper.className = 'FullModalOverlay';
         wrapper.innerHTML = `
             <div class="ModalOverlayContent ModalOverlayBackground"></div>
@@ -14,7 +14,7 @@
                         <div class="ModalPosition_Content">
                             <div class="ModalPosition_TopBar"></div>
                             <div class="ModalPosition_Dismiss">
-                                <div id="os-close-btn" class="closeButton">
+                                <div id="addGameModalCloseButton" class="closeButton">
                                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="SVGIcon_Button SVGIcon_X_Line" width="256px" height="256px" viewBox="0 0 256 256">
                                         <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="212" y1="212" x2="44" y2="44"></line>
                                         <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="44" y1="212" x2="212" y2="44"></line>
@@ -26,7 +26,7 @@
                                     <div role="heading" aria-level="2" class="DialogHeader">Add a game</div>
                                     <div class="DialogBody">
                                         <div class="DialogInput_Wrapper _DialogLayout Panel">
-                                            <input id="os-appid-input"
+                                            <input id="addGameModalAppIDInput"
                                                 class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
                                                 placeholder="AppID"
                                                 type="text"
@@ -35,8 +35,8 @@
                                     </div>
                                     <div class="DialogFooter">
                                         <div class="DialogTwoColLayout _DialogColLayout Panel">
-                                            <button id="os-download-btn" type="button" class="DialogButton _DialogLayout Primary Focusable">Download</button>
-                                            <button id="os-cancel-btn" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
+                                            <button id="addGameModalDownloadButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Download</button>
+                                            <button id="addGameModalCancelButton" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
@@ -61,11 +61,11 @@
             }
         });
 
-        wrapper.querySelector('#os-close-btn').onclick = closeModal;
-        wrapper.querySelector('#os-cancel-btn').onclick = closeModal;
+        wrapper.querySelector('#addGameModalCloseButton').onclick = closeModal;
+        wrapper.querySelector('#addGameModalCancelButton').onclick = closeModal;
         
-        wrapper.querySelector('#os-download-btn').onclick = function() {
-            var appid = wrapper.querySelector('#os-appid-input').value.trim();
+        wrapper.querySelector('#addGameModalDownloadButton').onclick = function() {
+            var appid = wrapper.querySelector('#addGameModalAppIDInput').value.trim();
             if (!appid) return;
             console.log('OpenSteam: download for AppID', appid);
             closeModal();
