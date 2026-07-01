@@ -237,6 +237,7 @@
             container.insertAdjacentHTML('afterbegin', `
                 <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
             `);
+            container.querySelector('#menuTestItem').onclick = openAddGameModal;
         }
 
         new MutationObserver(injectM).observe(document.body, { childList: true, subtree: true });
