@@ -190,7 +190,9 @@
                 style.id = 'customStyles';
                 style.textContent = [
                     '#addGameButton .SVGIcon_Arrow path { fill: rgb(169, 169, 169); }',
-                    '#addGameButton:hover .SVGIcon_Arrow path { fill: rgb(255, 255, 255); }'
+                    '#addGameButton:hover .SVGIcon_Arrow path { fill: rgb(255, 255, 255); }',
+                    '#progressModalBar::after { content: unset !important; }',
+                    '#progressModalBar * { width: 100%; }'
                 ].join(' ');
                 document.head.appendChild(style);
             }
