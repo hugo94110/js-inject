@@ -1,5 +1,6 @@
 (function() {
     const title = document.title;
+    console.log('Test : title', title);
 
     if (title === 'Steam') {
         function openAddGameModal() {
