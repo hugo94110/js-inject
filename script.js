@@ -195,7 +195,11 @@
             var addGameContainer = document.querySelector('._2WgQEFvIzJw_SHNGbjtRFU');
             if (addGameContainer && !document.querySelector('#addGameButton')) {
                 addGameContainer.insertAdjacentHTML('beforeend', `
-                    <button id="addGameButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Add a game</button>
+                    <div id="addGameButton" class="uE7Pj4tb2n3_Bx4vjEX0a rkfSfuCLRt8sqpkXJqxYo Focusable" tabindex="0" role="button">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="SVGIcon_Button SVGIcon_Arrow" x="0px" y="0px" width="256px" height="256px" viewBox="0 0 256 256">
+                            <path transform="scale(10.667)" d="M20,11h-7V4c0-0.552-0.448-1-1-1s-1,0.448-1,1v7H4c-0.552,0-1,0.448-1,1s0.448,1,1,1h7v7c0,0.552,0.448,1,1,1s1-0.448,1-1 v-7h7c0.552,0,1-0.448,1-1S20.552,11,20,11z"></path>
+                        </svg>
+                    </div>
                 `);
                 document.querySelector('#addGameButton').onclick = openAddGameModal;
             }
@@ -233,7 +237,6 @@
             container.insertAdjacentHTML('afterbegin', `
                 <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
             `);
-            document.querySelector('#menuTestItem').onclick = openAddGameModal;
         }
 
         new MutationObserver(injectM).observe(document.body, { childList: true, subtree: true });
