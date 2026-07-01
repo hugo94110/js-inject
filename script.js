@@ -239,7 +239,7 @@
         function injectM() {
             var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n.H2MNnp7B_8r37I5wiifE0');
             if (!container || container.querySelector('#menuTestItem')) return;
-            container.insertAdjacentHTML('beforeend', `
+            container.insertAdjacentHTML('afterbegin', `
                 <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
             `);
         }
