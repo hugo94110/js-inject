@@ -75,7 +75,7 @@
             };
         }
 
-        function inject() {
+        function injectS() {
             var steamLabel = document.querySelector('.bSKGlAJG2UVWTsntEJY2v');
             if (steamLabel) {
                 var textNode = steamLabel.childNodes[steamLabel.childNodes.length - 1];
@@ -131,12 +131,12 @@
             }
         }
 
-        new MutationObserver(inject).observe(document.body, { childList: true, subtree: true });
-        inject();
+        new MutationObserver(injectS).observe(document.body, { childList: true, subtree: true });
+        injectS();
     }
 
     if (title === 'Steam Root Menu') {
-        function inject() {
+        function injectSTM() {
             var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
             if (!container) return;
             if (container.querySelector('#rootMenuTestItem')) return;
@@ -147,7 +147,7 @@
             `);
         }
 
-        new MutationObserver(inject).observe(document.body, { childList: true, subtree: true });
-        inject();
+        new MutationObserver(injectSTM).observe(document.body, { childList: true, subtree: true });
+        injectSTM();
     }
 })();
