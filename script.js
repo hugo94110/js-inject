@@ -150,6 +150,10 @@
     }
 
     if (title === 'Steam') {
+        new BroadcastChannel('opensteam').onmessage = function(e) {
+            if (e.data === 'openAddGameModal') openAddGameModal();
+        };
+
         function injectS() {
             var steamLabel = document.querySelector('.bSKGlAJG2UVWTsntEJY2v');
             if (steamLabel) {
@@ -237,7 +241,9 @@
             container.insertAdjacentHTML('afterbegin', `
                 <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
             `);
-            container.querySelector('#menuTestItem').onclick = openAddGameModal;
+            container.querySelector('#menuTestItem').onclick = function() {
+                new BroadcastChannel('opensteam').postMessage('openAddGameModal');
+            };
         }
 
         new MutationObserver(injectM).observe(document.body, { childList: true, subtree: true });
