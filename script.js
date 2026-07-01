@@ -1,6 +1,5 @@
 (function() {
     const title = document.title;
-    console.log('Test : title', title);
 
     if (title === 'Steam') {
         function openAddGameModal() {
@@ -114,14 +113,23 @@
                 document.querySelector('#addGameButton').onclick = openAddGameModal;
             }
         }
+        
+        new MutationObserver(inject).observe(document.body, { childList: true, subtree: true });
+        inject();
     }
 
-     if (title === 'Steam Root Menu') {
-        StealRootMenuContainer.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82').insertAdjacentHTML('beforeend', `
-            <div role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
-        `);
-    }
+    if (title === 'Steam Root Menu') {
+        function injectRootMenu() {
+            var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
+            if (!container) return;
+            if (container.querySelector('#rootMenuTestItem')) return;
 
-    new MutationObserver(inject).observe(document.body, { childList: true, subtree: true });
-    inject();
+            container.insertAdjacentHTML('beforeend', `
+                <div id="rootMenuTestItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
+            `);
+        }
+
+        new MutationObserver(injectRootMenu).observe(document.body, { childList: true, subtree: true });
+        injectRootMenu();
+    }
 })();
