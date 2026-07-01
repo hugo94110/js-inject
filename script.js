@@ -171,15 +171,6 @@
 //     }
 // })();
 
- window.onerror = function(msg, src, line, col) {
-    var encoded = encodeURIComponent('[' + src + ':' + line + '] ' + msg);
-    fetch('http://127.0.0.1:9223/log?msg=' + encoded).catch(function(){});
-};
-window.onunhandledrejection = function(e) {
-    var encoded = encodeURIComponent('Unhandled promise: ' + (e.reason || '?'));
-    fetch('http://127.0.0.1:9223/log?msg=' + encoded).catch(function(){});
-};
-
 (function() {
     const title = document.title;
 
@@ -201,13 +192,11 @@ window.onunhandledrejection = function(e) {
 
                 document.querySelector('#githubButton').onclick = function(event) {
                     event.preventDefault();
-                    try {
-                        fetch('http://127.0.0.1:9223/log?msg=button+clicked');
-                        window.open('https://github.com/hugo94110/OpenSteam', '_blank');
-                        fetch('http://127.0.0.1:9223/log?msg=window.open+called');
-                    } catch(e) {
-                        fetch('http://127.0.0.1:9223/log?msg=' + encodeURIComponent(e.message)).catch(function(){});
-                    }
+                    var link = document.createElement('a');
+                    link.href = 'https://github.com/hugo94110/OpenSteam';
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    link.click();
                 };
             }
         }
