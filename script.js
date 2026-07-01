@@ -171,16 +171,16 @@
 //     }
 // })();
 
-(function() {
+ window.onerror = function(msg, src, line, col) {
+    var encoded = encodeURIComponent('[' + src + ':' + line + '] ' + msg);
+    fetch('http://127.0.0.1:9223/log?msg=' + encoded).catch(function(){});
+};
+window.onunhandledrejection = function(e) {
+    var encoded = encodeURIComponent('Unhandled promise: ' + (e.reason || '?'));
+    fetch('http://127.0.0.1:9223/log?msg=' + encoded).catch(function(){});
+};
 
-    window.onerror = function(msg, src, line, col) {
-        var encoded = encodeURIComponent('[' + src + ':' + line + '] ' + msg);
-        fetch('http://127.0.0.1:9223/log?msg=' + encoded).catch(function(){});
-    };
-    window.onunhandledrejection = function(e) {
-        var encoded = encodeURIComponent('Unhandled promise: ' + (e.reason || '?'));
-        fetch('http://127.0.0.1:9223/log?msg=' + encoded).catch(function(){});
-    };
+(function() {
     const title = document.title;
 
     if (title === 'Steam') {
