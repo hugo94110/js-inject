@@ -124,9 +124,9 @@
             if (!container) return;
             if (container.querySelector('#rootMenuTestItem')) return;
 
-            container.insertAdjacentHTML('beforeend', `
+            container.insertAdjacentHTML('afterbegin', `
+                <div id="rootMenuTestItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">OpenSteam</div>
                 <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
-                <div id="rootMenuTestItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
             `);
         }
 
