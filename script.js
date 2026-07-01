@@ -224,7 +224,7 @@
             var temp = document.createElement('div');
             temp.innerHTML = `
                 <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
-                <div id="rootMenuOSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">OpenSteam Logs</div>
+                <div id="rootMenuOSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">OpenSteam Settings</div>
                 `;
             while (temp.firstChild) {
                 container.insertBefore(temp.firstChild, referenceNode);
