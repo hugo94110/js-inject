@@ -67,11 +67,21 @@
             wrapper.querySelector('#addGameModalCloseButton').onclick = closeAddGameModal;
             wrapper.querySelector('#addGameModalCancelButton').onclick = closeAddGameModal;
             
-            wrapper.querySelector('#addGameModalDownloadButton').onclick = function() {
+            wrapper.querySelector('#addGameModalDownloadButton').onclick = async function() {
                 var appid = wrapper.querySelector('#addGameModalAppIDInput').value.trim();
                 if (!appid) return;
-                console.log('OpenSteam: download for AppID', appid);
-                closeAddGameModal();
+
+                try {
+                    const res = await fetch('http://localhost:9223/download?appid=' + appid);
+                    const data = await res.json();
+                    if (data.ok) {
+                        closeAddGameModal();
+                    } else {
+                        console.error('error : ', data.error);
+                    }
+                } catch(e) {
+                    console.error('server unreachable : ', e);
+                }
             };
         }
 
@@ -101,7 +111,7 @@
                 document.querySelector('#githubButton').onclick = function(event) {
                     event.preventDefault();
                     var link = document.createElement('a');
-                    link.href = 'https://github.com/hugo94110';
+                    link.href = 'https://github.com/hugo94110/OpenSteam';
                     link.target = '_blank';
                     link.rel = 'noopener noreferrer';
                     link.click();
