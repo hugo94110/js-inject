@@ -34,9 +34,7 @@
                     </div>
                 </dialog>
             `;
-            var container = document.querySelector('._27qasW5wLU4h4nUgawpo1q');
-            if (!container) return null;
-            container.appendChild(wrapper);
+            document.body.appendChild(wrapper);
             return wrapper;
         }
 
