@@ -139,12 +139,17 @@
         function injectSTM() {
             var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
             if (!container) return;
-            if (container.querySelector('#rootMenuTestItem')) return;
+            if (container.querySelector('#rootMenuOSSItem')) return;
 
-            container.insertAdjacentHTML('afterbegin', `
-                <div id="rootMenuTestItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
+            var referenceNode = container.children[container.children.length - 2];
+            var temp = document.createElement('div');
+            temp.innerHTML = `
+                <div id="rootMenuOSSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">OpenSteam Settings</div>
                 <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
-            `);
+            `;
+            while (temp.firstChild) {
+                container.insertBefore(temp.firstChild, referenceNode);
+            }
         }
 
         new MutationObserver(injectSTM).observe(document.body, { childList: true, subtree: true });
