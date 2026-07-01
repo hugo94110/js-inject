@@ -119,7 +119,7 @@
                 </div>
                 <div class="DialogFooter">
                     <div class="DialogTwoColLayout _DialogColLayout Panel">
-                        <button id="addGameModalDownloadButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Download</button>
+                        <button id="addGameModalDownloadButton" type="button" class="DialogButton _DialogLayout Primary Disabled Focusable">Download</button>
                         <button id="addGameModalCancelButton" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
                     </div>
                 </div>
@@ -131,8 +131,15 @@
             });
             wrapper.querySelector('#addGameModalDismissButton').onclick = closeAddGameModal;
             wrapper.querySelector('#addGameModalCancelButton').onclick = closeAddGameModal;
-            wrapper.querySelector('#addGameModalDownloadButton').onclick = async function() {
-                var appid = wrapper.querySelector('#addGameModalAppIDInput').value.trim();
+
+            var downloadBtn = wrapper.querySelector('#addGameModalDownloadButton');
+            var appidInput = wrapper.querySelector('#addGameModalAppIDInput');
+            appidInput.addEventListener('input', function() {
+                downloadBtn.classList.toggle('Disabled', !appidInput.value.trim());
+            });
+
+            downloadBtn.onclick = async function() {
+                var appid = appidInput.value.trim();
                 if (!appid) return;
                 closeAddGameModal();
                 var progress = openProgressModal();
