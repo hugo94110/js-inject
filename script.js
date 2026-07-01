@@ -30,12 +30,12 @@
                                         <div class="DialogBody">
                                             <div class="DialogBodyText">
                                                 <div id="«r26b»" style="display: contents;">
-                                                    Install a user theme from an ID. These ID's can be found after selecting a theme at <a href="#">https://steambrew.app/themes</a><br><br>
+                                                    Add a game to your library by entering its AppID. You can find AppID's on <a href="#">https://steamdb.info</a>
                                                 </div>
                                             <div class="DialogInput_Wrapper _DialogLayout Panel">
                                                 <input id="addGameModalAppIDInput"
                                                     class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
-                                                    placeholder="AppID"
+                                                    placeholder="Enter an AppID..."
                                                     type="text"
                                                     spellcheck="false">
                                             </div>
