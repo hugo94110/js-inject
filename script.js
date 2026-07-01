@@ -201,7 +201,14 @@
             }
         }
 
-        new MutationObserver(injectS).observe(document.body, { childList: true, subtree: true });
-        injectS();
+       if (document.body) {
+            new MutationObserver(injectS).observe(document.body, { childList: true, subtree: true });
+            injectS();
+        } else {
+            document.addEventListener('DOMContentLoaded', () => {
+                new MutationObserver(injectS).observe(document.body, { childList: true, subtree: true });
+                injectS();
+            });
+        }
     }
 })();
