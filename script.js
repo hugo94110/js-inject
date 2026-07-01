@@ -2,11 +2,10 @@
     const title = document.title;
 
     if (title === 'Steam') {
-        function openAddGameModal() {
-            if (document.querySelector('#addGameModal')) return;
-
+        function createModal(id, innerHtml, closeable) {
+            if (document.querySelector('#' + id)) return null;
             var wrapper = document.createElement('div');
-            wrapper.id = 'addGameModal';
+            wrapper.id = id;
             wrapper.className = 'FullModalOverlay';
             wrapper.innerHTML = `
                 <div class="ModalOverlayContent ModalOverlayBackground"></div>
@@ -16,36 +15,18 @@
                         <div class="ModalPosition" tabindex="0">
                             <div class="ModalPosition_Content">
                                 <div class="ModalPosition_TopBar"></div>
+                                ${closeable ? `
                                 <div class="ModalPosition_Dismiss">
-                                    <div id="addGameModalCloseButton" class="closeButton">
+                                    <div id="${id}DismissButton" class="closeButton">
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="SVGIcon_Button SVGIcon_X_Line" width="256px" height="256px" viewBox="0 0 256 256">
                                             <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="212" y1="212" x2="44" y2="44"></line>
                                             <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="44" y1="212" x2="212" y2="44"></line>
                                         </svg>
                                     </div>
-                                </div>
+                                </div>` : ''}
                                 <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _DialogCenterVertically" style="min-width:500px;">
                                     <div class="DialogContent_InnerWidth">
-                                        <div role="heading" aria-level="2" class="DialogHeader">Add a game</div>
-                                        <div class="DialogBody">
-                                            <div class="DialogBodyText">
-                                                <div id="«r26b»" style="display: contents;">
-                                                    Add a game to your library by entering its AppID. You can find every AppID's on <a href="https://steamdb.info" target="_blank">https://steamdb.info</a><br><br>
-                                                </div>
-                                            <div class="DialogInput_Wrapper _DialogLayout Panel">
-                                                <input id="addGameModalAppIDInput"
-                                                    class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
-                                                    placeholder="Enter an AppID..."
-                                                    type="text"
-                                                    spellcheck="false">
-                                            </div>
-                                        </div>
-                                        <div class="DialogFooter">
-                                            <div class="DialogTwoColLayout _DialogColLayout Panel">
-                                                <button id="addGameModalDownloadButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Download</button>
-                                                <button id="addGameModalCancelButton" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
-                                            </div>
-                                        </div>
+                                        ${innerHtml}
                                     </div>
                                 </div>
                             </div>
@@ -53,38 +34,120 @@
                     </div>
                 </dialog>
             `;
-
             var container = document.querySelector('._27qasW5wLU4h4nUgawpo1q');
-            if (!container) return;
+            if (!container) return null;
             container.appendChild(wrapper);
+            return wrapper;
+        }
 
-            function closeAddGameModal() {
-                wrapper.remove();
-            }
+        function openProgressModal() {
+            var wrapper = createModal('progressModal', `
+                <div role="heading" aria-level="2" class="DialogHeader">Downloading game...</div>
+                <div class="DialogBody">
+                    <div id="progressModalStatus" style="font-weight:500; text-align:right; margin-bottom:10px;">Please wait...</div>
+                    <div role="progressbar" aria-valuenow="0" id="progressModalBar" class="_1-nHjRywUoX7Mpyc6JOPaQ">
+                        <div id="progressModalFill" class="_2_0JonK7eKEvh8IoOvq0-B _15MHlcA_l7Joagx8EUsOSP" style="background: var(--gpColor-Blue, #1a9fff);"></div>
+                    </div>
+                </div>
+            `, false);
+            if (!wrapper) return null;
+            return {
+                setStatus: function(text) {
+                    var el = document.querySelector('#progressModalStatus');
+                    if (el) el.textContent = text;
+                },
+                close: function() { wrapper.remove(); }
+            };
+        }
 
+        function openSuccessModal(appid) {
+            var wrapper = createModal('successModal', `
+                <div role="heading" aria-level="2" class="DialogHeader">Game added</div>
+                <div class="DialogBody">
+                    <div class="DialogBodyText">AppID ${appid} has been successfully added to your library.</div>
+                </div>
+                <div class="DialogFooter">
+                    <div class="Panel">
+                        <button id="successModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
+                    </div>
+                </div>
+            `, true);
+            if (!wrapper) return;
+            function closeSuccessModal() { wrapper.remove(); }
             wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
-                if (!wrapper.querySelector('.DialogContent').contains(e.target)) {
-                    closeAddGameModal();
-                }
+                if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeSuccessModal();
             });
+            wrapper.querySelector('#successModalDismissButton').onclick = closeSuccessModal;
+            wrapper.querySelector('#successModalCloseButton').onclick = closeSuccessModal;
+        }
 
-            wrapper.querySelector('#addGameModalCloseButton').onclick = closeAddGameModal;
+        function openErrorModal(message) {
+            var wrapper = createModal('errorModal', `
+                <div role="heading" aria-level="2" class="DialogHeader">Download failed</div>
+                <div class="DialogBody">
+                    <div class="DialogBodyText">${message}</div>
+                </div>
+                <div class="DialogFooter">
+                    <div class="Panel">
+                        <button id="errorModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
+                    </div>
+                </div>
+            `, true);
+            if (!wrapper) return;
+            function closeErrorModal() { wrapper.remove(); }
+            wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
+                if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeErrorModal();
+            });
+            wrapper.querySelector('#errorModalDismissButton').onclick = closeErrorModal;
+            wrapper.querySelector('#errorModalCloseButton').onclick = closeErrorModal;
+        }
+
+        function openAddGameModal() {
+            var wrapper = createModal('addGameModal', `
+                <div role="heading" aria-level="2" class="DialogHeader">Add a game</div>
+                <div class="DialogBody">
+                    <div class="DialogBodyText">
+                        Add a game to your library by entering its AppID. You can find every AppID on <a href="https://steamdb.info" target="_blank">steamdb.info</a>
+                    </div>
+                    <div class="DialogInput_Wrapper _DialogLayout Panel">
+                        <input id="addGameModalAppIDInput"
+                            class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
+                            placeholder="Enter an AppID..."
+                            type="text"
+                            spellcheck="false">
+                    </div>
+                </div>
+                <div class="DialogFooter">
+                    <div class="DialogTwoColLayout _DialogColLayout Panel">
+                        <button id="addGameModalDownloadButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Download</button>
+                        <button id="addGameModalCancelButton" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
+                    </div>
+                </div>
+            `, true);
+            if (!wrapper) return;
+            function closeAddGameModal() { wrapper.remove(); }
+            wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
+                if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeAddGameModal();
+            });
+            wrapper.querySelector('#addGameModalDismissButton').onclick = closeAddGameModal;
             wrapper.querySelector('#addGameModalCancelButton').onclick = closeAddGameModal;
-            
             wrapper.querySelector('#addGameModalDownloadButton').onclick = async function() {
                 var appid = wrapper.querySelector('#addGameModalAppIDInput').value.trim();
                 if (!appid) return;
-
+                closeAddGameModal();
+                var progress = openProgressModal();
                 try {
-                    const res = await fetch('http://localhost:9223/download?appid=' + appid);
-                    const data = await res.json();
+                    var res = await fetch('http://localhost:9223/download?appid=' + appid);
+                    var data = await res.json();
+                    progress.close();
                     if (data.ok) {
-                        closeAddGameModal();
+                        openSuccessModal(appid);
                     } else {
-                        console.error('error : ', data.error);
+                        openErrorModal(data.error || 'An unknown error occurred.');
                     }
                 } catch(e) {
-                    console.error('server unreachable : ', e);
+                    progress.close();
+                    openErrorModal('OpenSteam server unreachable. Make sure it is running.');
                 }
             };
         }
