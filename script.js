@@ -8,7 +8,7 @@
         wrapper.className = 'FullModalOverlay';
         wrapper.innerHTML = `
             <div class="ModalOverlayContent ModalOverlayBackground"></div>
-            <dialog style="all:unset; display:contents;" open="">
+            <dialog class="_32QRvPPBL733SpNR9x0Gp3" open="">
                 <div></div>
                 <div class="ModalOverlayContent active" tabindex="-1">
                     <div class="ModalPosition" tabindex="0">
@@ -33,7 +33,8 @@
                 </div>
             </dialog>
         `;
-        document.body.appendChild(wrapper);
+        var modalContainer = document.querySelector('._27qasW5wLU4h4nUgawpo1q') || document.body;
+        modalContainer.appendChild(wrapper);
         return wrapper;
     }
 
