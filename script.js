@@ -223,7 +223,7 @@
     }
 
     // if (title === 'Steam Root Menu') {
-    //     function injectSTM() {
+    //     function injectSRM() {
     //         var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
     //         if (!container) return;
     //         if (container.querySelector('#rootMenuOSItem')) return;
@@ -239,8 +239,8 @@
     //         }
     //     }
 
-    //     new MutationObserver(injectSTM).observe(document.body, { childList: true, subtree: true });
-    //     injectSTM();
+    //     new MutationObserver(injectSRM).observe(document.body, { childList: true, subtree: true });
+    //     injectSRM();
     // }
 
     // if (title === 'Menu') {
