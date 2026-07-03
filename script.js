@@ -9,7 +9,7 @@
             wrapper.className = 'FullModalOverlay';
             wrapper.innerHTML = `
                 <div class="ModalOverlayContent ModalOverlayBackground"></div>
-                <dialog style="all:unset; display:contents;" open="">
+                <dialog class="_32QRvPPBL733SpNR9x0Gp3" open="">
                     <div></div>
                     <div class="ModalOverlayContent active" tabindex="-1">
                         <div class="ModalPosition" tabindex="0">
@@ -24,7 +24,7 @@
                                         </svg>
                                     </div>
                                 </div>` : ''}
-                                <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _DialogCenterVertically" style="min-width:500px;">
+                                <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _2siQZCB9yAOkiG8N-zRZEe _DialogCenterVertically">
                                     <div class="DialogContent_InnerWidth">
                                         ${innerHtml}
                                     </div>
@@ -42,13 +42,19 @@
 
         function openProgressModal() {
             var wrapper = createModal('progressModal', `
-                <div role="heading" aria-level="2" class="DialogHeader">Downloading game...</div>
-                <div class="DialogBody">
-                    <div id="progressModalStatus" style="font-weight:500; text-align:right; margin-bottom:10px;">Please wait...</div>
-                    <div role="progressbar" aria-valuenow="0" id="progressModalBar" class="_1-nHjRywUoX7Mpyc6JOPaQ">
-                        <div id="progressModalFill" class="_2_0JonK7eKEvh8IoOvq0-B _15MHlcA_l7Joagx8EUsOSP" style="background: var(--gpColor-Blue, #1a9fff);"></div>
+                <form role="dialog">
+                    <div class="Panel">
+                        <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
+                            <div role="heading" aria-level="2" class="DialogHeader">Downloading game...</div>
+                        </div>
+                        <div class="_2V8QeCkR06XqFUJO_GDTVP">
+                            <div id="progressModalStatus" style="font-weight:500; text-align:right; margin-bottom:10px;">Please wait...</div>
+                            <div role="progressbar" aria-valuenow="0" id="progressModalBar" class="_1-nHjRywUoX7Mpyc6JOPaQ">
+                                <div id="progressModalFill" class="_2_0JonK7eKEvh8IoOvq0-B _15MHlcA_l7Joagx8EUsOSP" style="background: var(--gpColor-Blue, #1a9fff);"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             `, false);
             if (!wrapper) return null;
             return {
@@ -62,15 +68,21 @@
 
         function openSuccessModal(appid) {
             var wrapper = createModal('successModal', `
-                <div role="heading" aria-level="2" class="DialogHeader">Game added</div>
-                <div class="DialogBody">
-                    <div class="DialogBodyText">AppID ${appid} has been successfully added to your library.</div>
-                </div>
-                <div class="DialogFooter">
+                <form role="dialog">
                     <div class="Panel">
-                        <button id="successModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
+                        <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
+                            <div role="heading" aria-level="2" class="DialogHeader">Game added</div>
+                        </div>
+                        <div class="_2V8QeCkR06XqFUJO_GDTVP">
+                            <div class="DialogBodyText _1fFighONx9alttArw-qWFo">AppID ${appid} has been successfully added to your library.</div>
+                        </div>
+                        <div class="DialogFooter">
+                            <div class="Panel">
+                                <button id="successModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             `, true);
             if (!wrapper) return;
             function closeSuccessModal() { wrapper.remove(); }
@@ -83,15 +95,21 @@
 
         function openErrorModal(message) {
             var wrapper = createModal('errorModal', `
-                <div role="heading" aria-level="2" class="DialogHeader">Download failed</div>
-                <div class="DialogBody">
-                    <div class="DialogBodyText">${message}</div>
-                </div>
-                <div class="DialogFooter">
+                <form role="dialog">
                     <div class="Panel">
-                        <button id="errorModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
+                        <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
+                            <div role="heading" aria-level="2" class="DialogHeader">Download failed</div>
+                        </div>
+                        <div class="_2V8QeCkR06XqFUJO_GDTVP">
+                            <div class="DialogBodyText _1fFighONx9alttArw-qWFo">${message}</div>
+                        </div>
+                        <div class="DialogFooter">
+                            <div class="Panel">
+                                <button id="errorModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             `, true);
             if (!wrapper) return;
             function closeErrorModal() { wrapper.remove(); }
@@ -104,25 +122,31 @@
 
         function openAddGameModal() {
             var wrapper = createModal('addGameModal', `
-                <div role="heading" aria-level="2" class="DialogHeader">Add a game</div>
-                <div class="DialogBody">
-                    <div class="DialogBodyText">
-                        Add a game to your library by entering its AppID. You can find every AppID on <a href="https://steamdb.info" target="_blank">steamdb.info</a>
+                <form role="dialog">
+                    <div class="Panel">
+                        <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
+                            <div role="heading" aria-level="2" class="DialogHeader">Add a game</div>
+                        </div>
+                        <div class="_2V8QeCkR06XqFUJO_GDTVP">
+                            <div class="DialogBodyText _1fFighONx9alttArw-qWFo">
+                                Add a game to your library by entering its AppID. You can find every AppID on <a href="https://steamdb.info" target="_blank">steamdb.info</a>
+                            </div>
+                            <div class="DialogInput_Wrapper _DialogLayout Panel">
+                                <input id="addGameModalAppIDInput"
+                                    class="DialogInput DialogInputPlaceholder DialogTextInputBase _2JbjuHCSB0QxUPIMEQbqAi Focusable"
+                                    placeholder="Enter an AppID..."
+                                    type="text"
+                                    spellcheck="false">
+                            </div>
+                        </div>
+                        <div class="DialogFooter">
+                            <div class="DialogTwoColLayout _DialogColLayout Panel">
+                                <button id="addGameModalDownloadButton" type="button" class="DialogButton _DialogLayout Primary Disabled Focusable">Download</button>
+                                <button id="addGameModalCancelButton" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="DialogInput_Wrapper _DialogLayout Panel">
-                        <input id="addGameModalAppIDInput"
-                            class="DialogInput DialogInputPlaceholder DialogTextInputBase Focusable"
-                            placeholder="Enter an AppID..."
-                            type="text"
-                            spellcheck="false">
-                    </div>
-                </div>
-                <div class="DialogFooter">
-                    <div class="DialogTwoColLayout _DialogColLayout Panel">
-                        <button id="addGameModalDownloadButton" type="button" class="DialogButton _DialogLayout Primary Disabled Focusable">Download</button>
-                        <button id="addGameModalCancelButton" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
-                    </div>
-                </div>
+                </form>
             `, true);
             if (!wrapper) return;
             function closeAddGameModal() { wrapper.remove(); }
