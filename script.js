@@ -22,9 +22,9 @@
         } catch (e) {}
     }
 
-    function closeContextMenu() {
+    function closeContextMenu(doc) {
         try {
-            var items = document.querySelectorAll('.contextMenuItem');
+            var items = (doc || document).querySelectorAll('.contextMenuItem');
             for (var i = 0; i < items.length; i++) {
                 var keys = Object.keys(items[i]);
                 for (var j = 0; j < keys.length; j++) {
@@ -276,48 +276,59 @@
 
         new MutationObserver(injectS).observe(document.body, { childList: true, subtree: true });
         injectS();
-    }
 
-    if (title === 'Steam Root Menu') {
-        function injectSRM() {
-            var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
-            if (!container) return;
-            if (container.querySelector('#rootMenuOSItem')) return;
+        function injectMenuItems(win) {
+            var doc = win.document;
 
-            var referenceNode = container.children[container.children.length - 2];
-            var temp = document.createElement('div');
-            temp.innerHTML = `
-                <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
-                <div id="rootMenuOSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
-                `;
-            while (temp.firstChild) {
-                container.insertBefore(temp.firstChild, referenceNode);
+            if (doc.title === 'Steam Root Menu') {
+                var container = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
+                if (container && !container.querySelector('#rootMenuOSItem')) {
+                    var referenceNode = container.children[container.children.length - 2];
+                    var temp = doc.createElement('div');
+                    temp.innerHTML = `
+                        <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
+                        <div id="rootMenuOSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
+                        `;
+                    while (temp.firstChild) {
+                        container.insertBefore(temp.firstChild, referenceNode);
+                    }
+                    doc.querySelector('#rootMenuOSItem').onclick = function() {
+                        openAddGameModal();
+                        closeContextMenu(doc);
+                    };
+                }
             }
 
-            document.querySelector('#rootMenuOSItem').onclick = function() {
-                openAddGameModal();
-                closeContextMenu();
-            };
+            // if (doc.title === 'Menu') {
+            //     var menuContainer = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n.H2MNnp7B_8r37I5wiifE0');
+            //     if (menuContainer && !menuContainer.querySelector('#menuTestItem')) {
+            //         menuContainer.insertAdjacentHTML('afterbegin', `
+            //             <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
+            //         `);
+            //         doc.querySelector('#menuTestItem').onclick = function() {
+            //             openAddGameModal();
+            //             closeContextMenu(doc);
+            //         };
+            //     }
+            // }
         }
 
-        new MutationObserver(injectSRM).observe(document.body, { childList: true, subtree: true });
-        injectSRM();
-    }
+        function watchPopup(popup) {
+            try {
+                var win = popup.m_popup.window || popup.m_popup;
+                if (win === window) return;
+                var attach = function() {
+                    if (!win.document || !win.document.body) { setTimeout(attach, 10); return; }
+                    new win.MutationObserver(function() { injectMenuItems(win); }).observe(win.document.body, { childList: true, subtree: true });
+                    injectMenuItems(win);
+                };
+                attach();
+            } catch (e) {}
+        }
 
-    // if (title === 'Menu') {
-    //     function injectM() {
-    //         var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n.H2MNnp7B_8r37I5wiifE0');
-    //         if (!container || container.querySelector('#menuTestItem')) return;
-    //         container.insertAdjacentHTML('afterbegin', `
-    //             <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
-    //         `);
-    //         document.querySelector('#menuTestItem').onclick = function() {
-    //             openAddGameModal();
-    //             closeContextMenu();
-    //         };
-    //     }
-    
-    //     new MutationObserver(injectM).observe(document.body, { childList: true, subtree: true });
-    //     injectM();
-    // }
+        try {
+            Array.from(sharedContext.g_PopupManager.GetPopups()).forEach(watchPopup);
+            sharedContext.g_PopupManager.AddPopupCreatedCallback(watchPopup);
+        } catch (e) {}
+    }
 })();
