@@ -1,188 +1,232 @@
 (function() {
     const title = document.title;
 
-    if (title === 'Steam') {
-        function createModal(id, innerHtml, closeable) {
-            if (document.querySelector('#' + id)) return null;
-            var wrapper = document.createElement('div');
-            wrapper.id = id;
-            wrapper.className = 'FullModalOverlay';
-            wrapper.innerHTML = `
-                <div class="ModalOverlayContent ModalOverlayBackground"></div>
-                <dialog class="_32QRvPPBL733SpNR9x0Gp3" open="">
-                    <div></div>
-                    <div class="ModalOverlayContent active" tabindex="-1">
-                        <div class="ModalPosition" tabindex="0">
-                            <div class="ModalPosition_Content">
-                                <div class="ModalPosition_TopBar"></div>
-                                ${closeable ? `
-                                <div class="ModalPosition_Dismiss">
-                                    <div id="${id}DismissButton" class="closeButton">
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="SVGIcon_Button SVGIcon_X_Line" width="256px" height="256px" viewBox="0 0 256 256">
-                                            <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="212" y1="212" x2="44" y2="44"></line>
-                                            <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="44" y1="212" x2="212" y2="44"></line>
-                                        </svg>
-                                    </div>
-                                </div>` : ''}
-                                <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _2siQZCB9yAOkiG8N-zRZEe _DialogCenterVertically">
-                                    <div class="DialogContent_InnerWidth">
-                                        ${innerHtml}
-                                    </div>
+    function getSharedContext() {
+        try {
+            if (window.g_PopupManager) return window;
+            if (window.opener && window.opener.g_PopupManager) return window.opener;
+        } catch (e) {}
+        return null;
+    }
+
+    function getMainWindow() {
+        if (title === 'Steam') return window;
+        try {
+            var shared = getSharedContext();
+            if (!shared) return null;
+            var popup = shared.g_PopupManager.GetExistingPopup && shared.g_PopupManager.GetExistingPopup('SP Desktop_uid0');
+            if (popup && popup.m_popup) return popup.m_popup.window || popup.m_popup;
+            var popups = Array.from(shared.g_PopupManager.GetPopups());
+            for (var i = 0; i < popups.length; i++) {
+                var win = popups[i].m_popup && (popups[i].m_popup.window || popups[i].m_popup);
+                if (win && win.document && win.document.title === 'Steam') return win;
+            }
+        } catch (e) {}
+        return null;
+    }
+
+    function setStoreBrowserVisible(visible) {
+        try {
+            var shared = getSharedContext();
+            var manager = shared && shared.MainWindowBrowserManager;
+            if (manager && manager.m_browser && manager.m_lastLocation && manager.m_lastLocation.pathname.indexOf('/browser') === 0) {
+                manager.m_browser.SetVisible(visible);
+            }
+        } catch (e) {}
+    }
+
+    var openModals = 0;
+
+    function closeModal(wrapper) {
+        wrapper.remove();
+        if (openModals > 0 && --openModals === 0) setStoreBrowserVisible(true);
+    }
+
+    function createModal(id, innerHtml, closeable) {
+        var mainWindow = getMainWindow();
+        if (!mainWindow) return null;
+        var doc = mainWindow.document;
+        if (doc.querySelector('#' + id)) return null;
+        var wrapper = doc.createElement('div');
+        wrapper.id = id;
+        wrapper.className = 'FullModalOverlay';
+        wrapper.innerHTML = `
+            <div class="ModalOverlayContent ModalOverlayBackground"></div>
+            <dialog class="_32QRvPPBL733SpNR9x0Gp3" open="">
+                <div></div>
+                <div class="ModalOverlayContent active" tabindex="-1">
+                    <div class="ModalPosition" tabindex="0">
+                        <div class="ModalPosition_Content">
+                            <div class="ModalPosition_TopBar"></div>
+                            ${closeable ? `
+                            <div class="ModalPosition_Dismiss">
+                                <div id="${id}DismissButton" class="closeButton">
+                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="SVGIcon_Button SVGIcon_X_Line" width="256px" height="256px" viewBox="0 0 256 256">
+                                        <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="212" y1="212" x2="44" y2="44"></line>
+                                        <line fill="none" stroke="#FFFFFF" stroke-width="45" stroke-miterlimit="10" x1="44" y1="212" x2="212" y2="44"></line>
+                                    </svg>
+                                </div>
+                            </div>` : ''}
+                            <div class="DialogContent _DialogLayout GenericDialogBase GenericConfirmDialog _2siQZCB9yAOkiG8N-zRZEe _DialogCenterVertically">
+                                <div class="DialogContent_InnerWidth">
+                                    ${innerHtml}
                                 </div>
                             </div>
                         </div>
                     </div>
-                </dialog>
-            `;
-            var container = document.querySelector('._27qasW5wLU4h4nUgawpo1q');
-            if (!container) return null;
-            container.appendChild(wrapper);
-            return wrapper;
-        }
+                </div>
+            </dialog>
+        `;
+        var container = doc.querySelector('._27qasW5wLU4h4nUgawpo1q');
+        if (!container) return null;
+        container.appendChild(wrapper);
+        if (++openModals === 1) setStoreBrowserVisible(false);
+        return wrapper;
+    }
 
-        function openProgressModal() {
-            var wrapper = createModal('progressModal', `
-                <form role="dialog">
-                    <div class="Panel">
-                        <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
-                            <div role="heading" aria-level="2" class="DialogHeader">Downloading game...</div>
-                        </div>
-                        <div class="_2V8QeCkR06XqFUJO_GDTVP">
-                            <div id="progressModalStatus" style="font-weight:500; text-align:right; margin-bottom:10px;">Please wait...</div>
-                            <div role="progressbar" aria-valuenow="0" id="progressModalBar" class="_1-nHjRywUoX7Mpyc6JOPaQ">
-                                <div id="progressModalFill" class="_2_0JonK7eKEvh8IoOvq0-B _15MHlcA_l7Joagx8EUsOSP" style="background: var(--gpColor-Blue, #1a9fff);"></div>
-                            </div>
+    function openProgressModal() {
+        var wrapper = createModal('progressModal', `
+            <form role="dialog">
+                <div class="Panel">
+                    <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
+                        <div role="heading" aria-level="2" class="DialogHeader">Downloading game...</div>
+                    </div>
+                    <div class="_2V8QeCkR06XqFUJO_GDTVP">
+                        <div id="progressModalStatus" style="font-weight:500; text-align:right; margin-bottom:10px;">Please wait...</div>
+                        <div role="progressbar" aria-valuenow="0" id="progressModalBar" class="_1-nHjRywUoX7Mpyc6JOPaQ">
+                            <div id="progressModalFill" class="_2_0JonK7eKEvh8IoOvq0-B _15MHlcA_l7Joagx8EUsOSP" style="background: var(--gpColor-Blue, #1a9fff);"></div>
                         </div>
                     </div>
-                </form>
-            `, false);
-            if (!wrapper) return null;
-            return {
-                setStatus: function(text) {
-                    var el = document.querySelector('#progressModalStatus');
-                    if (el) el.textContent = text;
-                },
-                close: function() { wrapper.remove(); }
-            };
-        }
+                </div>
+            </form>
+        `, false);
+        if (!wrapper) return null;
+        return {
+            setStatus: function(text) {
+                var el = wrapper.querySelector('#progressModalStatus');
+                if (el) el.textContent = text;
+            },
+            close: function() { closeModal(wrapper); }
+        };
+    }
 
-        function openSuccessModal(appid) {
-            var wrapper = createModal('successModal', `
-                <form role="dialog">
-                    <div class="Panel">
-                        <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
-                            <div role="heading" aria-level="2" class="DialogHeader">Game added</div>
-                        </div>
-                        <div class="_2V8QeCkR06XqFUJO_GDTVP">
-                            <div class="DialogBodyText _1fFighONx9alttArw-qWFo">AppID ${appid} has been successfully added to your library.</div>
-                        </div>
-                        <div class="DialogFooter">
-                            <div class="Panel">
-                                <button id="successModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
-                            </div>
+    function openSuccessModal(appid) {
+        var wrapper = createModal('successModal', `
+            <form role="dialog">
+                <div class="Panel">
+                    <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
+                        <div role="heading" aria-level="2" class="DialogHeader">Game added</div>
+                    </div>
+                    <div class="_2V8QeCkR06XqFUJO_GDTVP">
+                        <div class="DialogBodyText _1fFighONx9alttArw-qWFo">AppID ${appid} has been successfully added to your library.</div>
+                    </div>
+                    <div class="DialogFooter">
+                        <div class="Panel">
+                            <button id="successModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
                         </div>
                     </div>
-                </form>
-            `, true);
-            if (!wrapper) return;
-            function closeSuccessModal() { wrapper.remove(); }
-            wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
-                if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeSuccessModal();
-            });
-            wrapper.querySelector('#successModalDismissButton').onclick = closeSuccessModal;
-            wrapper.querySelector('#successModalCloseButton').onclick = closeSuccessModal;
-        }
+                </div>
+            </form>
+        `, true);
+        if (!wrapper) return;
+        function closeSuccessModal() { closeModal(wrapper); }
+        wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
+            if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeSuccessModal();
+        });
+        wrapper.querySelector('#successModalDismissButton').onclick = closeSuccessModal;
+        wrapper.querySelector('#successModalCloseButton').onclick = closeSuccessModal;
+    }
 
-        function openErrorModal(message) {
-            var wrapper = createModal('errorModal', `
-                <form role="dialog">
-                    <div class="Panel">
-                        <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
-                            <div role="heading" aria-level="2" class="DialogHeader">Download failed</div>
-                        </div>
-                        <div class="_2V8QeCkR06XqFUJO_GDTVP">
-                            <div class="DialogBodyText _1fFighONx9alttArw-qWFo">${message}</div>
-                        </div>
-                        <div class="DialogFooter">
-                            <div class="Panel">
-                                <button id="errorModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
-                            </div>
+    function openErrorModal(message) {
+        var wrapper = createModal('errorModal', `
+            <form role="dialog">
+                <div class="Panel">
+                    <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
+                        <div role="heading" aria-level="2" class="DialogHeader">Download failed</div>
+                    </div>
+                    <div class="_2V8QeCkR06XqFUJO_GDTVP">
+                        <div class="DialogBodyText _1fFighONx9alttArw-qWFo">${message}</div>
+                    </div>
+                    <div class="DialogFooter">
+                        <div class="Panel">
+                            <button id="errorModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
                         </div>
                     </div>
-                </form>
-            `, true);
-            if (!wrapper) return;
-            function closeErrorModal() { wrapper.remove(); }
-            wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
-                if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeErrorModal();
-            });
-            wrapper.querySelector('#errorModalDismissButton').onclick = closeErrorModal;
-            wrapper.querySelector('#errorModalCloseButton').onclick = closeErrorModal;
-        }
+                </div>
+            </form>
+        `, true);
+        if (!wrapper) return;
+        function closeErrorModal() { closeModal(wrapper); }
+        wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
+            if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeErrorModal();
+        });
+        wrapper.querySelector('#errorModalDismissButton').onclick = closeErrorModal;
+        wrapper.querySelector('#errorModalCloseButton').onclick = closeErrorModal;
+    }
 
-        function openAddGameModal() {
-            var wrapper = createModal('addGameModal', `
-                <form role="dialog">
-                    <div class="Panel">
-                        <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
-                            <div role="heading" aria-level="2" class="DialogHeader">Add a game</div>
+    function openAddGameModal() {
+        var wrapper = createModal('addGameModal', `
+            <form role="dialog">
+                <div class="Panel">
+                    <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
+                        <div role="heading" aria-level="2" class="DialogHeader">Add a game</div>
+                    </div>
+                    <div class="DialogBody">
+                        <div class="DialogBodyText">
+                            Add a game to your library by entering its AppID. You can find every AppID on <a href="https://steamdb.info" target="_blank">steamdb.info</a>
                         </div>
-                        <div class="DialogBody">
-                            <div class="DialogBodyText">
-                                Add a game to your library by entering its AppID. You can find every AppID on <a href="https://steamdb.info" target="_blank">steamdb.info</a>
-                            </div>
-                            <div class="DialogInput_Wrapper _DialogLayout Panel">
-                                <input id="addGameModalAppIDInput"
-                                    class="DialogInput DialogInputPlaceholder DialogTextInputBase _2JbjuHCSB0QxUPIMEQbqAi Focusable"
-                                    placeholder="Enter an AppID..."
-                                    type="text"
-                                    spellcheck="false">
-                            </div>
-                        </div>
-                        <div class="DialogFooter">
-                            <div class="DialogTwoColLayout _DialogColLayout Panel">
-                                <button id="addGameModalDownloadButton" type="button" class="DialogButton _DialogLayout Primary Disabled Focusable">Download</button>
-                                <button id="addGameModalCancelButton" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
-                            </div>
+                        <div class="DialogInput_Wrapper _DialogLayout Panel">
+                            <input id="addGameModalAppIDInput"
+                                class="DialogInput DialogInputPlaceholder DialogTextInputBase _2JbjuHCSB0QxUPIMEQbqAi Focusable"
+                                placeholder="Enter an AppID..."
+                                type="text"
+                                spellcheck="false">
                         </div>
                     </div>
-                </form>
-            `, true);
-            if (!wrapper) return;
-            function closeAddGameModal() { wrapper.remove(); }
-            wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
-                if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeAddGameModal();
-            });
-            wrapper.querySelector('#addGameModalDismissButton').onclick = closeAddGameModal;
-            wrapper.querySelector('#addGameModalCancelButton').onclick = closeAddGameModal;
+                    <div class="DialogFooter">
+                        <div class="DialogTwoColLayout _DialogColLayout Panel">
+                            <button id="addGameModalDownloadButton" type="button" class="DialogButton _DialogLayout Primary Disabled Focusable">Download</button>
+                            <button id="addGameModalCancelButton" type="button" class="DialogButton _DialogLayout Secondary Focusable">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        `, true);
+        if (!wrapper) return;
+        function closeAddGameModal() { closeModal(wrapper); }
+        wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
+            if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeAddGameModal();
+        });
+        wrapper.querySelector('#addGameModalDismissButton').onclick = closeAddGameModal;
+        wrapper.querySelector('#addGameModalCancelButton').onclick = closeAddGameModal;
 
-            var downloadBtn = wrapper.querySelector('#addGameModalDownloadButton');
-            var appidInput = wrapper.querySelector('#addGameModalAppIDInput');
-            appidInput.addEventListener('input', function() {
-                downloadBtn.classList.toggle('Disabled', !/^\d+$/.test(appidInput.value.trim()));
-            });
+        var downloadBtn = wrapper.querySelector('#addGameModalDownloadButton');
+        var appidInput = wrapper.querySelector('#addGameModalAppIDInput');
+        appidInput.addEventListener('input', function() {
+            downloadBtn.classList.toggle('Disabled', !/^\d+$/.test(appidInput.value.trim()));
+        });
 
-            downloadBtn.onclick = async function() {
-                var appid = appidInput.value.trim();
-                if (!appid) return;
-                closeAddGameModal();
-                var progress = openProgressModal();
-                try {
-                    var res = await fetch('http://localhost:9223/download?appid=' + appid);
-                    var data = await res.json();
-                    progress.close();
-                    if (data.ok) {
-                        openSuccessModal(appid);
-                    } else {
-                        openErrorModal(data.error || 'An unknown error occurred.');
-                    }
-                } catch(e) {
-                    progress.close();
-                    openErrorModal('OpenSteam server unreachable. Make sure it is running.');
+        downloadBtn.onclick = async function() {
+            var appid = appidInput.value.trim();
+            if (!appid) return;
+            var progress = openProgressModal();
+            closeAddGameModal();
+            try {
+                var res = await (getMainWindow() || window).fetch('http://localhost:9223/download?appid=' + appid);
+                var data = await res.json();
+                if (data.ok) {
+                    openSuccessModal(appid);
+                } else {
+                    openErrorModal(data.error || 'An unknown error occurred.');
                 }
-            };
-        }
+            } catch(e) {
+                openErrorModal('OpenSteam server unreachable. Make sure it is running.');
+            }
+            if (progress) progress.close();
+        };
+    }
 
+    if (title === 'Steam') {
         function injectS() {
             var steamLabel = document.querySelector('.bSKGlAJG2UVWTsntEJY2v');
             if (steamLabel) {
@@ -246,26 +290,30 @@
         injectS();
     }
 
-    // if (title === 'Steam Root Menu') {
-    //     function injectSRM() {
-    //         var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
-    //         if (!container) return;
-    //         if (container.querySelector('#rootMenuOSItem')) return;
+    if (title === 'Steam Root Menu') {
+        function injectSRM() {
+            var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
+            if (!container) return;
+            if (container.querySelector('#rootMenuOSItem')) return;
 
-    //         var referenceNode = container.children[container.children.length - 2];
-    //         var temp = document.createElement('div');
-    //         temp.innerHTML = `
-    //             <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
-    //             <div id="rootMenuOSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">OpenSteam Settings</div>
-    //             `;
-    //         while (temp.firstChild) {
-    //             container.insertBefore(temp.firstChild, referenceNode);
-    //         }
-    //     }
+            var referenceNode = container.children[container.children.length - 2];
+            var temp = document.createElement('div');
+            temp.innerHTML = `
+                <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
+                <div id="rootMenuOSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">OpenSteam Settings</div>
+                `;
+            while (temp.firstChild) {
+                container.insertBefore(temp.firstChild, referenceNode);
+            }
 
-    //     new MutationObserver(injectSRM).observe(document.body, { childList: true, subtree: true });
-    //     injectSRM();
-    // }
+            document.querySelector('#rootMenuOSItem').onclick = function() {
+                openAddGameModal();
+            };
+        }
+
+        new MutationObserver(injectSRM).observe(document.body, { childList: true, subtree: true });
+        injectSRM();
+    }
 
     // if (title === 'Menu') {
     //     function injectM() {
