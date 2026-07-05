@@ -60,7 +60,7 @@
         wrapper.className = 'FullModalOverlay osModal';
         wrapper.innerHTML = `
             <div class="ModalOverlayContent ModalOverlayBackground"></div>
-            <dialog class="_32QRvPPBL733SpNR9x0Gp3" open="">
+            <dialog class="_32QRvPPBL733SpNR9x0Gp3">
                 <div></div>
                 <div class="ModalOverlayContent active" tabindex="-1">
                     <div class="ModalPosition" tabindex="0">
@@ -86,6 +86,12 @@
             </dialog>
         `;
         container.appendChild(wrapper);
+        var dialog = wrapper.querySelector('dialog');
+        dialog.addEventListener('cancel', function(e) {
+            e.preventDefault();
+            if (closeable) closeModal(wrapper);
+        });
+        dialog.showModal();
         if (closeable) {
             wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
                 if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeModal(wrapper);
@@ -298,20 +304,20 @@
         injectSRM();
     }
 
-    if (title === 'Menu') {
-        function injectM() {
-            var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n.H2MNnp7B_8r37I5wiifE0');
-            if (!container || container.querySelector('#menuTestItem')) return;
-            container.insertAdjacentHTML('afterbegin', `
-                <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
-            `);
-            document.querySelector('#menuTestItem').onclick = function() {
-                openAddGameModal();
-                closeContextMenu();
-            };
-        }
+    // if (title === 'Menu') {
+    //     function injectM() {
+    //         var container = document.querySelector('._2EstNjFIIZm_WUSKm5Wt7n.H2MNnp7B_8r37I5wiifE0');
+    //         if (!container || container.querySelector('#menuTestItem')) return;
+    //         container.insertAdjacentHTML('afterbegin', `
+    //             <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
+    //         `);
+    //         document.querySelector('#menuTestItem').onclick = function() {
+    //             openAddGameModal();
+    //             closeContextMenu();
+    //         };
+    //     }
     
-        new MutationObserver(injectM).observe(document.body, { childList: true, subtree: true });
-        injectM();
-    }
+    //     new MutationObserver(injectM).observe(document.body, { childList: true, subtree: true });
+    //     injectM();
+    // }
 })();
