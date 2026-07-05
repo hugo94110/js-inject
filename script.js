@@ -22,6 +22,26 @@
         } catch (e) {}
     }
 
+    function closeContextMenu() {
+        try {
+            var items = document.querySelectorAll('.contextMenuItem');
+            for (var i = 0; i < items.length; i++) {
+                var keys = Object.keys(items[i]);
+                for (var j = 0; j < keys.length; j++) {
+                    if (keys[j].indexOf('__reactFiber$') === 0) {
+                        for (var fiber = items[i][keys[j]]; fiber; fiber = fiber.return) {
+                            var inst = fiber.stateNode && fiber.stateNode.context && fiber.stateNode.context.instance;
+                            if (inst && typeof inst.ForceHide === 'function') {
+                                inst.ForceHide();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e) {}
+    }
+
     function closeModal(wrapper) {
         var doc = wrapper.ownerDocument;
         wrapper.remove();
@@ -270,7 +290,7 @@
 
             document.querySelector('#rootMenuOSItem').onclick = function() {
                 openAddGameModal();
-                window.close();
+                closeContextMenu();
             };
         }
 
@@ -287,7 +307,7 @@
     //         `);
     //         document.querySelector('#menuTestItem').onclick = function() {
     //             openAddGameModal();
-    //             window.close();
+    //             closeContextMenu();
     //         };
     //     }
     //
