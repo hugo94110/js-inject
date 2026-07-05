@@ -1,10 +1,11 @@
 (function() {
     const title = document.title;
+    const sharedContext = window.opener;
 
     function getMainWindow() {
         if (title === 'Steam') return window;
         try {
-            var popups = Array.from(window.opener.g_PopupManager.GetPopups());
+            var popups = Array.from(sharedContext.g_PopupManager.GetPopups());
             for (var i = 0; i < popups.length; i++) {
                 if (popups[i].m_popup.document.title === 'Steam') return popups[i].m_popup;
             }
@@ -14,7 +15,7 @@
 
     function setStoreBrowserVisible(visible) {
         try {
-            var manager = window.opener.MainWindowBrowserManager;
+            var manager = sharedContext.MainWindowBrowserManager;
             if (manager.m_lastLocation.pathname.startsWith('/browser')) {
                 manager.m_browser.SetVisible(visible);
             }
@@ -269,6 +270,7 @@
 
             document.querySelector('#rootMenuOSItem').onclick = function() {
                 openAddGameModal();
+                window.close();
             };
         }
 
@@ -283,6 +285,10 @@
     //         container.insertAdjacentHTML('afterbegin', `
     //             <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
     //         `);
+    //         document.querySelector('#menuTestItem').onclick = function() {
+    //             openAddGameModal();
+    //             window.close();
+    //         };
     //     }
     //
     //     new MutationObserver(injectM).observe(document.body, { childList: true, subtree: true });
