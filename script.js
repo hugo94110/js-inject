@@ -1,25 +1,12 @@
 (function() {
     const title = document.title;
 
-    function getSharedContext() {
-        try {
-            if (window.g_PopupManager) return window;
-            if (window.opener && window.opener.g_PopupManager) return window.opener;
-        } catch (e) {}
-        return null;
-    }
-
     function getMainWindow() {
         if (title === 'Steam') return window;
         try {
-            var shared = getSharedContext();
-            if (!shared) return null;
-            var popup = shared.g_PopupManager.GetExistingPopup && shared.g_PopupManager.GetExistingPopup('SP Desktop_uid0');
-            if (popup && popup.m_popup) return popup.m_popup.window || popup.m_popup;
-            var popups = Array.from(shared.g_PopupManager.GetPopups());
+            var popups = Array.from(window.opener.g_PopupManager.GetPopups());
             for (var i = 0; i < popups.length; i++) {
-                var win = popups[i].m_popup && (popups[i].m_popup.window || popups[i].m_popup);
-                if (win && win.document && win.document.title === 'Steam') return win;
+                if (popups[i].m_popup.document.title === 'Steam') return popups[i].m_popup;
             }
         } catch (e) {}
         return null;
@@ -27,19 +14,17 @@
 
     function setStoreBrowserVisible(visible) {
         try {
-            var shared = getSharedContext();
-            var manager = shared && shared.MainWindowBrowserManager;
-            if (manager && manager.m_browser && manager.m_lastLocation && manager.m_lastLocation.pathname.indexOf('/browser') === 0) {
+            var manager = window.opener.MainWindowBrowserManager;
+            if (manager.m_lastLocation.pathname.startsWith('/browser')) {
                 manager.m_browser.SetVisible(visible);
             }
         } catch (e) {}
     }
 
-    var openModals = 0;
-
     function closeModal(wrapper) {
+        var doc = wrapper.ownerDocument;
         wrapper.remove();
-        if (openModals > 0 && --openModals === 0) setStoreBrowserVisible(true);
+        if (!doc.querySelector('.osModal')) setStoreBrowserVisible(true);
     }
 
     function createModal(id, innerHtml, closeable) {
@@ -47,9 +32,11 @@
         if (!mainWindow) return null;
         var doc = mainWindow.document;
         if (doc.querySelector('#' + id)) return null;
+        var container = doc.querySelector('._27qasW5wLU4h4nUgawpo1q');
+        if (!container) return null;
         var wrapper = doc.createElement('div');
         wrapper.id = id;
-        wrapper.className = 'FullModalOverlay';
+        wrapper.className = 'FullModalOverlay osModal';
         wrapper.innerHTML = `
             <div class="ModalOverlayContent ModalOverlayBackground"></div>
             <dialog class="_32QRvPPBL733SpNR9x0Gp3" open="">
@@ -77,10 +64,14 @@
                 </div>
             </dialog>
         `;
-        var container = doc.querySelector('._27qasW5wLU4h4nUgawpo1q');
-        if (!container) return null;
         container.appendChild(wrapper);
-        if (++openModals === 1) setStoreBrowserVisible(false);
+        if (closeable) {
+            wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
+                if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeModal(wrapper);
+            });
+            wrapper.querySelector('#' + id + 'DismissButton').onclick = function() { closeModal(wrapper); };
+        }
+        setStoreBrowserVisible(false);
         return wrapper;
     }
 
@@ -110,58 +101,33 @@
         };
     }
 
-    function openSuccessModal(appid) {
-        var wrapper = createModal('successModal', `
+    function openInfoModal(id, header, body) {
+        var wrapper = createModal(id, `
             <form role="dialog">
                 <div class="Panel">
                     <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
-                        <div role="heading" aria-level="2" class="DialogHeader">Game added</div>
+                        <div role="heading" aria-level="2" class="DialogHeader">${header}</div>
                     </div>
                     <div class="_2V8QeCkR06XqFUJO_GDTVP">
-                        <div class="DialogBodyText _1fFighONx9alttArw-qWFo">AppID ${appid} has been successfully added to your library.</div>
+                        <div class="DialogBodyText _1fFighONx9alttArw-qWFo">${body}</div>
                     </div>
                     <div class="DialogFooter">
                         <div class="Panel">
-                            <button id="successModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
+                            <button id="${id}CloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
                         </div>
                     </div>
                 </div>
             </form>
         `, true);
-        if (!wrapper) return;
-        function closeSuccessModal() { closeModal(wrapper); }
-        wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
-            if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeSuccessModal();
-        });
-        wrapper.querySelector('#successModalDismissButton').onclick = closeSuccessModal;
-        wrapper.querySelector('#successModalCloseButton').onclick = closeSuccessModal;
+        if (wrapper) wrapper.querySelector('#' + id + 'CloseButton').onclick = function() { closeModal(wrapper); };
+    }
+
+    function openSuccessModal(appid) {
+        openInfoModal('successModal', 'Game added', `AppID ${appid} has been successfully added to your library.`);
     }
 
     function openErrorModal(message) {
-        var wrapper = createModal('errorModal', `
-            <form role="dialog">
-                <div class="Panel">
-                    <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
-                        <div role="heading" aria-level="2" class="DialogHeader">Download failed</div>
-                    </div>
-                    <div class="_2V8QeCkR06XqFUJO_GDTVP">
-                        <div class="DialogBodyText _1fFighONx9alttArw-qWFo">${message}</div>
-                    </div>
-                    <div class="DialogFooter">
-                        <div class="Panel">
-                            <button id="errorModalCloseButton" type="button" class="DialogButton _DialogLayout Primary Focusable">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        `, true);
-        if (!wrapper) return;
-        function closeErrorModal() { closeModal(wrapper); }
-        wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
-            if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeErrorModal();
-        });
-        wrapper.querySelector('#errorModalDismissButton').onclick = closeErrorModal;
-        wrapper.querySelector('#errorModalCloseButton').onclick = closeErrorModal;
+        openInfoModal('errorModal', 'Download failed', message);
     }
 
     function openAddGameModal() {
@@ -193,12 +159,7 @@
             </form>
         `, true);
         if (!wrapper) return;
-        function closeAddGameModal() { closeModal(wrapper); }
-        wrapper.querySelector('.ModalOverlayContent.active').addEventListener('click', function(e) {
-            if (!wrapper.querySelector('.DialogContent').contains(e.target)) closeAddGameModal();
-        });
-        wrapper.querySelector('#addGameModalDismissButton').onclick = closeAddGameModal;
-        wrapper.querySelector('#addGameModalCancelButton').onclick = closeAddGameModal;
+        wrapper.querySelector('#addGameModalCancelButton').onclick = function() { closeModal(wrapper); };
 
         var downloadBtn = wrapper.querySelector('#addGameModalDownloadButton');
         var appidInput = wrapper.querySelector('#addGameModalAppIDInput');
@@ -210,7 +171,7 @@
             var appid = appidInput.value.trim();
             if (!appid) return;
             var progress = openProgressModal();
-            closeAddGameModal();
+            closeModal(wrapper);
             try {
                 var res = await (getMainWindow() || window).fetch('http://localhost:9223/download?appid=' + appid);
                 var data = await res.json();
@@ -300,7 +261,7 @@
             var temp = document.createElement('div');
             temp.innerHTML = `
                 <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
-                <div id="rootMenuOSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">OpenSteam Settings</div>
+                <div id="rootMenuOSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
                 `;
             while (temp.firstChild) {
                 container.insertBefore(temp.firstChild, referenceNode);
@@ -323,7 +284,7 @@
     //             <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
     //         `);
     //     }
-
+    //
     //     new MutationObserver(injectM).observe(document.body, { childList: true, subtree: true });
     //     injectM();
     // }
