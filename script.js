@@ -248,30 +248,6 @@
                 };
             }
 
-            // if (!document.querySelector('#customStyles')) {
-            //     var style = document.createElement('style');
-            //     style.id = 'customStyles';
-            //     style.textContent = [
-            //         '#addGameButton .SVGIcon_Arrow path { fill: rgb(169, 169, 169); }',
-            //         '#addGameButton:hover .SVGIcon_Arrow path { fill: rgb(255, 255, 255); }',
-            //         '#progressModalBar::after { content: unset !important; }',
-            //         '#progressModalBar * { width: 100%; }'
-            //     ].join(' ');
-            //     document.head.appendChild(style);
-            // }
-
-            // var addGameContainer = document.querySelector('._2WgQEFvIzJw_SHNGbjtRFU');
-            // if (addGameContainer && !document.querySelector('#addGameButton')) {
-            //     addGameContainer.insertAdjacentHTML('beforeend', `
-            //         <div id="addGameButton" class="uE7Pj4tb2n3_Bx4vjEX0a rkfSfuCLRt8sqpkXJqxYo Focusable" tabindex="0" role="button">
-            //             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="SVGIcon_Button SVGIcon_Arrow" x="0px" y="0px" width="256px" height="256px" viewBox="0 0 256 256">
-            //                 <path transform="scale(10.667)" d="M20,11h-7V4c0-0.552-0.448-1-1-1s-1,0.448-1,1v7H4c-0.552,0-1,0.448-1,1s0.448,1,1,1h7v7c0,0.552,0.448,1,1,1s1-0.448,1-1 v-7h7c0.552,0,1-0.448,1-1S20.552,11,20,11z"></path>
-            //             </svg>
-            //         </div>
-            //     `);
-            //     document.querySelector('#addGameButton').onclick = openAddGameModal;
-            // }
-
         }
 
         new MutationObserver(injectS).observe(document.body, { childList: true, subtree: true });
@@ -299,18 +275,18 @@
                 }
             }
 
-            // if (doc.title === 'Menu') {
-            //     var menuContainer = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n.H2MNnp7B_8r37I5wiifE0');
-            //     if (menuContainer && !menuContainer.querySelector('#menuTestItem')) {
-            //         menuContainer.insertAdjacentHTML('afterbegin', `
-            //             <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
-            //         `);
-            //         doc.querySelector('#menuTestItem').onclick = function() {
-            //             openAddGameModal();
-            //             closeContextMenu(doc);
-            //         };
-            //     }
-            // }
+            if (doc.title === 'Menu') {
+                var menuContainer = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n.H2MNnp7B_8r37I5wiifE0');
+                if (menuContainer && !menuContainer.querySelector('#menuTestItem')) {
+                    menuContainer.insertAdjacentHTML('afterbegin', `
+                        <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
+                    `);
+                    doc.querySelector('#menuTestItem').onclick = function() {
+                        openAddGameModal();
+                        closeContextMenu(doc);
+                    };
+                }
+            }
         }
 
         function watchPopup(popup) {
