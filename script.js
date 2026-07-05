@@ -255,35 +255,35 @@
 
             if (doc.title === 'Steam Root Menu') {
                 var container = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
-                if (container && !container.querySelector('#rootMenuOSItem')) {
+                if (container && !container.querySelector('#rootMenuAddGameItem')) {
                     var referenceNode = container.children[container.children.length - 2];
                     var temp = doc.createElement('div');
                     temp.innerHTML = `
                         <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
-                        <div id="rootMenuOSItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
+                        <div id="rootMenuAddGameItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Add a game</div>
                         `;
                     while (temp.firstChild) {
                         container.insertBefore(temp.firstChild, referenceNode);
                     }
-                    doc.querySelector('#rootMenuOSItem').onclick = function() {
+                    doc.querySelector('#rootMenuAddGameItem').onclick = function() {
                         openAddGameModal();
                         closeContextMenu(doc);
                     };
                 }
             }
 
-            if (doc.title === 'Menu') {
-                var menuContainer = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n.H2MNnp7B_8r37I5wiifE0');
-                if (menuContainer && !menuContainer.querySelector('#menuTestItem')) {
-                    menuContainer.insertAdjacentHTML('afterbegin', `
-                        <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
-                    `);
-                    doc.querySelector('#menuTestItem').onclick = function() {
-                        openAddGameModal();
-                        closeContextMenu(doc);
-                    };
-                }
-            }
+            // if (doc.title === 'Menu') {
+            //     var menuContainer = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n.H2MNnp7B_8r37I5wiifE0');
+            //     if (menuContainer && !menuContainer.querySelector('#menuTestItem')) {
+            //         menuContainer.insertAdjacentHTML('afterbegin', `
+            //             <div id="menuTestItem" role="menuitem" class="_1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Test</div>
+            //         `);
+            //         doc.querySelector('#menuTestItem').onclick = function() {
+            //             openAddGameModal();
+            //             closeContextMenu(doc);
+            //         };
+            //     }
+            // }
         }
 
         function watchPopup(popup) {
