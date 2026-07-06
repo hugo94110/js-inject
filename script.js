@@ -163,7 +163,7 @@
             <form role="dialog">
                 <div class="Panel">
                     <div class="_2IWpfqj8UL5hUs7n-pxnUy DialogHeader">
-                        <div role="heading" aria-level="2" class="DialogHeader">Add a game</div>
+                        <div role="heading" aria-level="2" class="DialogHeader">Add Game</div>
                     </div>
                     <div class="DialogBody">
                         <div class="DialogBodyText">
