@@ -256,15 +256,16 @@
             if (doc.title == 'Games Root Menu') {
                 var GameRootMenucontainer = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
                 if (GameRootMenucontainer && !GameRootMenucontainer.querySelector('#rootMenuAddGameItem')) {
-                    GameRootMenucontainer.insertAdjacentHTML('afterbegin', `
-                        <div id="rootMenuAddGameItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Add a Game with OpenSteam...</div>
-                        <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
-                    `);
-
-                    doc.querySelector('#rootMenuAddGameItem').onclick = function() {
-                        openAddGameModal();
-                        closeContextMenu(doc);
-                    };
+                    var hr = GameRootMenucontainer.querySelector('hr');
+                    if (hr) {
+                        hr.insertAdjacentHTML('afterend', `
+                            <div id="rootMenuAddGameItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Add a Game with OpenSteam...</div>
+                        `);
+                        doc.querySelector('#rootMenuAddGameItem').onclick = function() {
+                            openAddGameModal();
+                            closeContextMenu(doc);
+                        };
+                    }
                 }
             }
 
