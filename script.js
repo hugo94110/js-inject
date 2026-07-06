@@ -167,7 +167,7 @@
                     </div>
                     <div class="DialogBody">
                         <div class="DialogBodyText">
-                            Add a game to your library by entering its AppID. You can find every AppID on <a href="https://steamdb.info" target="_blank">steamdb.info</a>
+                            Enter an AppID to add a game to your library. You can find every AppID on <a href="https://steamdb.info" target="_blank">steamdb.info</a>
                         </div>
                         <div class="DialogInput_Wrapper _DialogLayout Panel">
                             <input id="addGameModalAppIDInput"
