@@ -253,7 +253,7 @@
                 }
             }
 
-            if (doc.title == 'Game Root Menu') {
+            if (doc.title == 'Games Root Menu') {
                 var GameRootMenucontainer = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
                 if (GameRootMenucontainer && !GameRootMenucontainer.querySelector('#rootMenuAddGameItem')) {
                     GameRootMenucontainer.insertAdjacentHTML('afterbegin', `
