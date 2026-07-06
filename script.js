@@ -261,7 +261,7 @@
                 if (GameRootMenucontainer && !GameRootMenucontainer.querySelector('#rootMenuAddGameItem')) {
                     GameRootMenucontainer.insertAdjacentHTML('beforeend', `
                         <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
-                        <div id="rootMenuAddGameItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Add a Game with OpenSteam...</div>
+                        <div id="rootMenuAddGameItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Add a Game to My Library with OpenSteam...</div>
                     `);
 
                     doc.querySelector('#rootMenuAddGameItem').onclick = function() {
