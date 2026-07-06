@@ -254,14 +254,13 @@
             }
 
             if (doc.title == 'Game Root Menu') {
-                var container = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
-                if (container) {
-                    var temp = doc.createElement('div');
-                    temp.innerHTML = `
+                var GameRootMenucontainer = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
+                if (GameRootMenucontainer && !GameRootMenucontainer.querySelector('#rootMenuAddGameItem')) {
+                    GameRootMenucontainer.insertAdjacentHTML('afterbegin', `
                         <hr class="_2jXHP0742MyApMUVUM8IFn _21GPYlKBCLsHQpTsHw_RL_">
                         <div id="rootMenuAddGameItem" role="menuitem" class="_2jXHP0742MyApMUVUM8IFn _2uiDecKkKjAq7nimy3uLhG _1n7Wloe5jZ6fSuvV18NNWI contextMenuItem">Add a Game with OpenSteam...</div>
-                    `;
-                    container.appendChild(temp);
+                    `);
+
                     doc.querySelector('#rootMenuAddGameItem').onclick = function() {
                         openAddGameModal();
                         closeContextMenu(doc);
