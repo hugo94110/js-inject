@@ -151,7 +151,7 @@
     }
 
     function openSuccessModal(appid) {
-        openInfoModal('successModal', 'Game added', `AppID ${appid} has been successfully added to your library.`);
+        openInfoModal('successModal', 'Game added', `${appid} has been successfully added to your library.`);
     }
 
     function openErrorModal(message) {
