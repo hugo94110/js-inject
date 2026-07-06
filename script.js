@@ -222,6 +222,7 @@
             var doc = win.document;
 
             if (doc.title === 'Steam') {
+                // Change "Steam" label
                 var steamLabel = doc.querySelector('.bSKGlAJG2UVWTsntEJY2v');
                 if (steamLabel) {
                     var textNode = steamLabel.childNodes[steamLabel.childNodes.length - 1];
@@ -230,6 +231,7 @@
                     }
                 }
 
+                // Add github button
                 var rootBarButtonContainer = doc.querySelector('._3cykd-VfN_xBxf3Qxriccm._1-9sir4j_KQiMqdkZjQN0u');
                 if (rootBarButtonContainer && !rootBarButtonContainer.querySelector('#githubButton')) {
                     rootBarButtonContainer.insertAdjacentHTML('afterbegin', `
@@ -254,6 +256,7 @@
             }
 
             if (doc.title == 'Games Root Menu') {
+                // "Add Game" menuitem
                 var GameRootMenucontainer = doc.querySelector('._2EstNjFIIZm_WUSKm5Wt7n._3pofGqV0buiKAfMPEs3_82');
                 if (GameRootMenucontainer && !GameRootMenucontainer.querySelector('#rootMenuAddGameItem')) {
                     GameRootMenucontainer.insertAdjacentHTML('beforeend', `
