@@ -174,6 +174,8 @@
                                 class="DialogInput DialogInputPlaceholder DialogTextInputBase _2JbjuHCSB0QxUPIMEQbqAi Focusable"
                                 placeholder="Enter an AppID..."
                                 type="text"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
                                 spellcheck="false">
                         </div>
                     </div>
@@ -192,7 +194,9 @@
         var downloadBtn = wrapper.querySelector('#addGameModalDownloadButton');
         var appidInput = wrapper.querySelector('#addGameModalAppIDInput');
         appidInput.addEventListener('input', function() {
-            downloadBtn.classList.toggle('Disabled', !/^\d+$/.test(appidInput.value.trim()));
+            var digitsOnly = appidInput.value.replace(/\D/g, '');
+            if (digitsOnly !== appidInput.value) appidInput.value = digitsOnly;
+            downloadBtn.classList.toggle('Disabled', !/^\d+$/.test(digitsOnly));
         });
 
         downloadBtn.onclick = async function() {
